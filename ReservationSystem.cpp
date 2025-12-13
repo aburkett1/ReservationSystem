@@ -88,3 +88,80 @@ void ReservationSystem::exportToFile(ofstream& fout) {
 void ReservationSystem::importFromFile(ifstream& fin) {
 
 }
+
+
+
+
+
+
+vector<Reservation*> viewReservation() const
+{
+    vector<Reservation*> result;
+
+    if (localUser == nullptr) {
+        cout << "No user is currently logged in." << endl;
+        return result;
+    }
+
+    for (Reservation* r : reservations) {
+        // Chekc my implementation of getUser()
+        if (r->getUser() == localUser) {
+            result.push_back(r);
+        }
+    }
+
+    return result;
+}
+
+
+
+
+
+
+void ReservationSystem::modifyReservation(Reservation* reservation, TimeRange newTimeSlot) {
+    if (reservation == nullptr) {
+        cout << "Error: invalid reservation pointer." << endl;
+        return;
+    }
+
+    // Get current data from the reservation
+    Resource* res = reservation->getResource();
+    DateAndTimeRange currentSlot = reservation->getTimeSlot();
+
+    //new dateandtimerange, WORTH CHECKING FOR ITS congruencY
+    DateAndTimeRange updatedSlot(
+        newTimeSlot.startHour,
+        newTimeSlot.endHour,
+        currentSlot.date
+    );
+
+    // Basic validation: start < end
+    if (updatedSlot.startHour >= updatedSlot.endHour) {
+        cout << "Error: start time must be earlier than end time." << endl;
+        return;
+    }
+
+    // Check for conflicts with other reservations on the same resource and date
+    for (Reservation* r : reservations) {
+        if (r == reservation) continue; //skip the reservation modifying
+
+        if (r->getResource() == res) {
+            DateAndTimeRange otherSlot = r->getTimeSlot();
+
+            if (otherSlot.date == updatedSlot.date) {
+                bool overlap = !(updatedSlot.endHour <= otherSlot.startHour ||
+                                 updatedSlot.startHour >= otherSlot.endHour);
+
+                if (overlap) {
+                    cout << "Error: new time slot conflicts with an existing reservation."
+                         << endl;
+                    return;
+                }
+            }
+        }
+    }
+
+    // If here then no conflict was found so update the reservation
+    reservation->setTimeSlot(updatedSlot);
+    cout << "Reservation successfully updated." << endl;
+}
