@@ -88,3 +88,60 @@ void ReservationSystem::exportToFile(ofstream& fout) {
 void ReservationSystem::importFromFile(ifstream& fin) {
 
 }
+
+
+void ReservationSystem::cancelReservation(Reservation* reservation)
+{
+    for (auto i = reservations.begin(); i != reservations.end(); ++i)
+    {
+        if (*i == reservation)
+        {
+            delete *i;
+            reservations.erase(i);
+            return;
+        }
+    }
+}
+
+
+
+void ReservationSystem::filterResourceType(ResourceType resourceFlag) const
+{
+    int choice;
+
+    cout << "Select resource type:\n";
+    cout << "0 - Music Room\n";
+    cout << "1 - Study Room\n";
+    cout << "Enter choice: ";
+    cin >> choice;
+
+    if (choice != MUSIC_ROOM && choice != STUDY_ROOM)
+    {
+        cout << "invalid resource type\n";
+        return;
+    }
+
+    resourceFlag = static_cast<ResourceType>(choice);
+    
+    for (Reservation* reservation : reservations)
+    {
+        Resource* res = reservation->getResource();
+
+        if (resourceFlag == MUSIC_ROOM)
+        {
+            if (dynamic_cast<MusicRoom*>(res))
+            {
+                res->print();
+                cout << endl;
+            }
+        }
+        else if (resourceFlag == STUDY_ROOM)
+        {
+            if (dynamic_cast<StudyRoom*>(res))
+            {
+                res->print();
+                cout << endl;
+            }
+        }
+    }
+}

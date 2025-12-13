@@ -24,7 +24,7 @@ public:
     void listResources() const;
     vector<Resource*> searchTitle(string name) const;
     Resource* searchID(int id) const;
-    vector<Resource*> filterResourceType(ResourceType resourceFlag) const;
+    void filterResourceType(ResourceType resourceFlag) const;
 
     // Student
     void createReservation(Resource* resource, TimeRange timeSlot);
