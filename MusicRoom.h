@@ -24,6 +24,7 @@ public:
 
     void print() const;
     void exportToFile(ofstream& fout) const;
+    void importFromFile(ifstream& fin);
 
 private:
     int capacity;
