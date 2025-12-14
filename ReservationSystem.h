@@ -24,7 +24,7 @@ public:
     void listResources() const;
     vector<Resource*> searchTitle(string name) const;
     Resource* searchID(int id) const;
-    vector<Resource*> filterResourceType(ResourceType resourceFlag) const;
+    void filterResourceType(ResourceType resourceFlag) const;
 
     // Student
     void createReservation(Resource* resource, TimeRange timeSlot);
@@ -41,10 +41,15 @@ public:
     void exportToFile(ofstream& out);
     void importFromFile(ifstream& in);
 
+private:
     User* localUser;
     vector<User*> registeredUsers;
     vector<Resource*> resources;
     vector<Reservation*> reservations;
+
+    // Helpers
+    User* searchUsersById(int id) const;
+    Reservation* importReservation(ifstream& fin);
 };
 
 #endif

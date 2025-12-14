@@ -15,6 +15,10 @@ struct TimeRange {
     int startHour;
     int endHour;
 
+    TimeRange()
+        : startHour(0), endHour(0)
+    {}
+
     TimeRange(int start, int end)
         : startHour(start), endHour(end)
     {}
@@ -39,8 +43,10 @@ public:
     // IO
     virtual void print() const = 0;
     virtual void exportToFile(ofstream& fout) const = 0;
+    virtual void importFromFile(ifstream& fin) = 0;
+    static Resource* importResource(ifstream& fin);
 
-private:
+protected:
     int id;
     string title;
     TimeRange availabilityHours;
