@@ -69,6 +69,113 @@ void ReservationSystem::addResource(Resource* resource) {
     resources.push_back(resource);
 }
 
+void ReservationSystem::editResource(Resource* resource) {
+	//display all of the current values for the resource
+	resource->print();
+	cout << endl;
+	
+	//variables for new user input
+	int newID;
+	string newTitle;
+	int newStart;
+	int newEnd;
+	int newCapacity;
+	string newLocation;
+	
+	//get and set the new ID
+	cout << "Enter New Resource ID: "; 
+	cin  >> newID;
+	resource->setID(newID);
+	
+	//get and set the new Title
+	cout << "Enter New Resource Title: "; 
+	getline(cin, newTitle);
+	resource->setTitle(newTitle);
+	
+	//get and set the new start and end times
+	cout << "Enter New Resource Start Time (integer): "; 
+	cin  >> newStart;
+	cout << "Enter New Resource End Time (integer): "; 
+	cin  >> newEnd;
+	resource->setAvailabilityHours({newStart, newEnd});
+	
+	//dynamically cast resource as a new musicRoom pointer
+	MusicRoom* musicRoom = dynamic_cast<MusicRoom*>(resource);
+
+    //dynamically cast resource as a new studyRoom pointer
+	StudyRoom* studyRoom = dynamic_cast<StudyRoom*>(resource);
+	
+	//check to make sure the recast worked, if not it should be studyRoom instead
+	if (musicRoom != nullptr){
+		//get and set the new capacity
+        cout << "Enter New Capacity (integer): ";
+        cin  >> newCapacity;
+        musicRoom->setCapacity(newCapacity);
+        
+        //get and set the new location
+        cout << "Enter New Location: ";
+        getline(cin, newLocation);
+        musicRoom->setLocation(newLocation);
+        
+        //variable for new user input
+		bool newSoundproof;
+		
+		//take in an integer value to set the new boolean for Soundproof
+		cout << "Enter New Soundproof Boolean (0 for false, 1 for true): ";
+		cin  >> newSoundproof;
+		musicRoom->setSoundproof(newSoundproof);
+	}
+	
+	//do this if the resource pointer needs to be recast to studyRoom instead 
+	else{
+        //get and set the new capacity
+        cout << "Enter New Capacity (integer): ";
+        cin  >> newCapacity;
+        studyRoom->setCapacity(newCapacity);
+        
+        //get and set the new location
+        cout << "Enter New Location: ";
+        getline(cin, newLocation);
+        studyRoom->setLocation(newLocation);
+
+		//variable for new user input
+		int newWhiteboardAmount;
+		
+		//get and set the new whiteboard amount
+		cout << "Enter New Whiteboard Amount: ";
+		cin  >> newWhiteboardAmount;
+		studyRoom->setWhiteboardAmount(newWhiteboardAmount);
+	}
+}
+
+void ReservationSystem::removeResource(Resource* resource) {
+	//variables to keep track of important search criteria
+	string targetTitle;
+	int targetID;
+	int resourceLocation;
+	int index;
+	
+	//cycle through all indices in resources vector
+	while(index < resources.size()){
+		//set target search values
+		targetTitle = resource->getTitle();
+		targetID = resource->getID();
+		
+		//check if the current location is a match for the target resource
+		if(resources[index]->getTitle() == targetTitle && resources[index]->getID() == targetID){
+			//set the resource's location at this index for later use
+			resourceLocation = index;
+		}
+		index++;
+	}
+	//delete the resource's referenced object, then make the pointer null to avoid a dumped variable
+	delete resource;
+	resource = nullptr;
+	
+	//erase the resource from the vector, which will then shift to fill the blank index
+	resources.erase(resources.begin() + resourceLocation);
+}
+
 // ========================================================================
 // MARK: File IO
 // ========================================================================
@@ -233,7 +340,7 @@ void ReservationSystem::filterResourceType(ResourceType resourceFlag) const
 }
 
 
-vector<Reservation*> viewReservation() const
+vector<Reservation*> ReservationSystem::viewReservation() const
 {
     vector<Reservation*> result;
 
