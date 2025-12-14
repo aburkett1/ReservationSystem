@@ -171,6 +171,63 @@ Reservation* ReservationSystem::importReservation(ifstream& fin) {
 
     if (user == nullptr || resource == nullptr)
         throw runtime_error("\n[importReservation]: Reservation user or resource is invalid.");
-
+  
     return new Reservation(user, resource, timeSlot);
+}
+
+
+void ReservationSystem::cancelReservation(Reservation* reservation)
+{
+    for (auto i = reservations.begin(); i != reservations.end(); ++i)
+    {
+        if (*i == reservation)
+        {
+            delete *i;
+            reservations.erase(i);
+            return;
+        }
+    }
+}
+
+
+
+void ReservationSystem::filterResourceType(ResourceType resourceFlag) const
+{
+    int choice;
+
+    cout << "Select resource type:\n";
+    cout << "0 - Music Room\n";
+    cout << "1 - Study Room\n";
+    cout << "Enter choice: ";
+    cin >> choice;
+
+    if (choice != MUSIC_ROOM && choice != STUDY_ROOM)
+    {
+        cout << "invalid resource type\n";
+        return;
+    }
+
+    resourceFlag = static_cast<ResourceType>(choice);
+    
+    for (Reservation* reservation : reservations)
+    {
+        Resource* res = reservation->getResource();
+
+        if (resourceFlag == MUSIC_ROOM)
+        {
+            if (dynamic_cast<MusicRoom*>(res))
+            {
+                res->print();
+                cout << endl;
+            }
+        }
+        else if (resourceFlag == STUDY_ROOM)
+        {
+            if (dynamic_cast<StudyRoom*>(res))
+            {
+                res->print();
+                cout << endl;
+            }
+        }
+    }
 }
