@@ -41,10 +41,15 @@ public:
     void exportToFile(ofstream& out);
     void importFromFile(ifstream& in);
 
+private:
     User* localUser;
     vector<User*> registeredUsers;
     vector<Resource*> resources;
     vector<Reservation*> reservations;
+
+    // Helpers
+    User* searchUsersById(int id) const;
+    Reservation* importReservation(ifstream& fin);
 };
 
 #endif

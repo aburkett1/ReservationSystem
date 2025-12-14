@@ -10,6 +10,10 @@ using namespace std;
 struct DateAndTimeRange : public TimeRange {
     string date;
 
+    DateAndTimeRange()
+        : TimeRange(), date("")
+    {}
+
     DateAndTimeRange(int start, int end, string d)
         : TimeRange(start, end), date(d)
     {}
@@ -21,6 +25,10 @@ public:
         : user(nullptr), resource(nullptr), timeSlot{0, 0, ""}
     {}
 
+    Reservation(User* user, Resource* resource, DateAndTimeRange timeSlot)
+        : user(user), resource(resource), timeSlot(timeSlot)
+    {}
+
     User* getUser() const { return user; }
     Resource* getResource() const { return resource; }
     DateAndTimeRange getTimeSlot() const { return timeSlot; }
@@ -29,7 +37,6 @@ public:
     void setResource(Resource* resource) { this->resource = resource; }
     void setTimeSlot(DateAndTimeRange timeSlot) { this->timeSlot = timeSlot; }
 
-    // Use ids for user and resource
     void exportToFile(ofstream& fout) const;
 
 private:

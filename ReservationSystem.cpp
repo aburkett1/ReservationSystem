@@ -61,9 +61,17 @@ Resource* ReservationSystem::searchID(int id) const
     return nullptr;
 };
 
+// ========================================================================
+// MARK: Admin
+// ========================================================================
+
 void ReservationSystem::addResource(Resource* resource) {
     resources.push_back(resource);
 }
+
+// ========================================================================
+// MARK: File IO
+// ========================================================================
 
 void ReservationSystem::exportToFile(ofstream& fout) {
     fout << "LOCAL_USER\n";
@@ -86,7 +94,85 @@ void ReservationSystem::exportToFile(ofstream& fout) {
 }
 
 void ReservationSystem::importFromFile(ifstream& fin) {
+    // Import localUser
+    string header;
+    getline(fin, header);
 
+    if (header != "LOCAL_USER")
+        throw runtime_error("\n[importFromFile]: File invalid. Missing LOCAL_USER header.");
+
+    localUser = new User();
+    localUser->importFromFile(fin);
+
+    // Import registeredUsers
+    int count;
+    fin >> header >> count;
+    fin.ignore(10000, '\n');
+
+    if (header != "REGISTERED_USERS")
+        throw runtime_error("\n[importFromFile]: File invalid. Missing REGISTERED_USERS header.");
+
+    for (int i = 0; i < count; i++) {
+        User* user = new User();
+        user->importFromFile(fin);
+        registeredUsers.push_back(user);
+    }
+
+    // Import resources
+    fin >> header >> count;
+    fin.ignore(10000, '\n');
+
+    if (header != "RESOURCES")
+        throw runtime_error("\n[importFromFile]: File invalid. Missing RESOURCES header.");
+
+    for (int i = 0; i < count; i++) {
+        Resource* resource = Resource::importResource(fin);
+        resources.push_back(resource);
+    }
+
+    // Import reservations
+    fin >> header >> count;
+    fin.ignore(10000, '\n');
+
+    if (header != "RESERVATIONS")
+        throw runtime_error("\n[importFromFile]: File invalid. Missing RESERVATIONS header.");
+
+    for (int i = 0; i < count; i++) {
+        Reservation* reservation = importReservation(fin);
+        reservations.push_back(reservation);
+    }
+}
+
+// =============================================================================
+// MARK: Helpers
+// =============================================================================
+
+User* ReservationSystem::searchUsersById(int id) const {
+    for (int i = 0; i < registeredUsers.size(); i++) {
+        if (registeredUsers[i]->getID() == id) {
+            return registeredUsers[i];
+        }
+    }
+
+    return nullptr;
+}
+
+Reservation* ReservationSystem::importReservation(ifstream& fin) {
+    int userId, resourceId;
+    fin >> userId >> resourceId;
+
+    DateAndTimeRange timeSlot;
+    fin >> timeSlot.startHour >> timeSlot.endHour;
+    fin.ignore(10000, '\n');
+    getline(fin, timeSlot.date);
+
+    User* user = searchUsersById(userId);
+    Resource* resource = searchID(resourceId);
+
+    if (user == nullptr || resource == nullptr)
+        throw runtime_error("\n[importReservation]: Reservation user or resource is invalid.");
+  
+    return new Reservation(user, resource, timeSlot);
 }
 
 
