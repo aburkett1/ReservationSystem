@@ -22,9 +22,9 @@ public:
     void setLocation(string location) { this->location = location; }
     void setWhiteboardAmount(int whiteboardAmount) { this->whiteboardAmount = whiteboardAmount; }
 
-    // IO
     void print() const;
     void exportToFile(ofstream& fout) const;
+    void importFromFile(ifstream& fin);
 
 private:
     int capacity;

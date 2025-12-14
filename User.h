@@ -3,6 +3,7 @@
 
 #include <string>
 #include <fstream>
+#include <iostream>
 using namespace std;
 
 enum UserType {
@@ -25,6 +26,7 @@ public:
     void setType(UserType type) { this->type = type; }
 
     void exportToFile(ofstream& fout) const;
+    void importFromFile(ifstream& fin);
 
 private:
     string name;
