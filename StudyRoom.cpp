@@ -1,5 +1,13 @@
 #include "StudyRoom.h"
 
+StudyRoom::StudyRoom(string title, TimeRange availability, int capacity, string location, int whiteboardAmount)
+: Resource(title, availability)
+{
+    this->capacity = capacity;
+    this->location = location;
+    this->whiteboardAmount = whiteboardAmount;
+}
+
 void StudyRoom::print() const {
     cout << left;
     cout << "--------------------------------" << "\n";

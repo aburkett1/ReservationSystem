@@ -148,18 +148,6 @@ void pressEnterToContinue() {
     cin.ignore(10000, '\n');
 }
 
-string getFileName()
-{
-    // Variables
-    string fileName{};
-
-    // Get group from user
-    cout << "File Name: ";
-    getline(cin, fileName);
-
-    return fileName;
-}
-
 int getResourceId()
 {
     // Variables
@@ -185,6 +173,76 @@ string getResourceName()
     return name;
 }
 
+TimeRange getAvailability()
+{
+    // Variables
+    int startTime{};
+    int endTime{};
+
+    // Get opening time from user
+    cout << "Opening Time [24hr]: ";
+    cin >> startTime;
+    cin.ignore(10000, '\n');
+
+    // Get closing time from user
+    cout << "Closing Time [24hr]: ";
+    cin >> endTime;
+    cin.ignore(10000, '\n');
+
+    return TimeRange(startTime, endTime);
+}
+
+int getCapacity()
+{
+    // Variables
+    int capacity{};
+
+    // Get capacity from user
+    cout << "Capacity: ";
+    cin >> capacity;
+    cin.ignore(10000, '\n');
+
+    return capacity;
+}
+
+string getLocation()
+{
+    // Variables
+    string location{};
+
+    // Get location from user
+    cout << "Location: ";
+    getline(cin, location);
+
+    return location;
+}
+
+bool getSoundproof()
+{
+    // Variables
+    char isSoundproof{};
+
+    // Get isSoundproof from user
+    cout << "Is this location soundproof? [Y/N]: ";
+    cin >> isSoundproof;
+    cin.ignore(10000, '\n');
+
+    return toupper(isSoundproof) == 'Y';
+}
+
+int getWhiteboardAmount()
+{
+    // Variables
+    int whiteboardAmount{};
+
+    // Get whiteboardAmount from user
+    cout << "Whiteboard Amount: ";
+    cin >> whiteboardAmount;
+    cin.ignore(10000, '\n');
+
+    return whiteboardAmount;
+}
+
 string getDate()
 {
     // Variables
@@ -195,6 +253,38 @@ string getDate()
     getline(cin, date);
 
     return date;
+}
+
+Resource* createResource(ResourceType type)
+{
+    // Variables
+    string title{};
+    TimeRange availability{};
+    int capacity;
+    string location;
+    bool soundproof;
+    int whiteboardAmount;
+
+    title = getResourceName();
+    availability = getAvailability();
+    capacity = getCapacity();
+    location = getLocation();
+    
+    switch (type)
+    {
+    case MUSIC_ROOM:
+        soundproof = getSoundproof();
+        return new MusicRoom(title, availability, capacity, location, soundproof);
+    
+    case STUDY_ROOM:
+        whiteboardAmount = getWhiteboardAmount();
+        return new StudyRoom(title, availability, capacity, location, whiteboardAmount);
+    
+    default:
+        return nullptr;
+    }
+    
+
 }
 
 template <typename T>

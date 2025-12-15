@@ -15,28 +15,23 @@ struct TimeRange {
     int startHour;
     int endHour;
 
-    TimeRange()
-        : startHour(0), endHour(0)
-    {}
+    TimeRange(): startHour(0), endHour(0) {}
 
     TimeRange(int start, int end)
-        : startHour(start), endHour(end)
-    {}
+        : startHour(start), endHour(end) {}
 };
 
 class Resource {
 public:
     Resource()
-        : id(0), title(""), availabilityHours{0, 0}
-    {}
-
+        : id(nextId++), title(""), availabilityHours{0, 0} {}
+    Resource(string title, TimeRange availability);
     virtual ~Resource() {}
 
     int getID() const { return id; }
     string getTitle() const { return title; }
     TimeRange getAvailabilityHours() const { return availabilityHours; }
 
-    void setID(int id) { this->id = id; }
     void setTitle(string title) { this->title = title; }
     void setAvailabilityHours(TimeRange availabilityHours) { this->availabilityHours = availabilityHours; }
 
@@ -47,9 +42,10 @@ public:
     static Resource* importResource(ifstream& fin);
 
 protected:
-    int id;
     string title;
     TimeRange availabilityHours;
+    int id;
+    inline static int nextId = 0;
 };
 
 #endif

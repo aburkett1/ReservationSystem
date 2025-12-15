@@ -10,9 +10,8 @@ using namespace std;
 
 class MusicRoom : public Resource {
 public:
-    MusicRoom()
-        : capacity(0), location(""), soundproof(false)
-    {}
+    MusicRoom(): capacity(0), location(""), soundproof(false) {}
+    MusicRoom(string title, TimeRange availability, int capacity, string location, bool soundproof);
 
     int getCapacity() const { return capacity; }
     string getLocation() const { return location; }

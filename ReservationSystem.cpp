@@ -175,17 +175,11 @@ void ReservationSystem::editResource(Resource* resource) {
 	cout << endl;
 	
 	//variables for new user input
-	int newID;
 	string newTitle;
 	int newStart;
 	int newEnd;
 	int newCapacity;
 	string newLocation;
-	
-	//get and set the new ID
-	cout << "Enter New Resource ID: "; 
-	cin  >> newID;
-	resource->setID(newID);
 	
 	//get and set the new Title
 	cout << "Enter New Resource Title: "; 

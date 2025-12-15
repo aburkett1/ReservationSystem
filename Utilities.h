@@ -17,7 +17,13 @@ vector<Menu> setupMenus();
 void pressEnterToContinue();
 int getResourceId();
 string getResourceName();
+TimeRange getAvailability();
+int getCapacity();
+string getLocation();
+bool getSoundproof();
+int getWhiteboardAmount();
 string getDate();
+Resource* createResource(ResourceType type);
 
 template <typename T>
 int userSelection(vector<T>& results);
@@ -36,9 +42,10 @@ void displayTitle(T title)
 
 void displayStartTimes(vector<int> timeSlots);
 void displayEndTimes(vector<int> timeSlots, int startTime);
-void displayResources(vector<Resource*>& results);
 void displayReservations(vector<Reservation*>& results);
 void displayReservation(Reservation*& selectedReservation);
+void displayTimeSlot(DateAndTimeRange timeSlot);
+void displayResources(vector<Resource*>& results);
 
 void clearScreen();
 
