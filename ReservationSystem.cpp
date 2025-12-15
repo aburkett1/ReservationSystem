@@ -238,7 +238,7 @@ void ReservationSystem::importFromFiles() {
     ifstream resourcesIn("resources.txt");
 
     if (!resourcesIn)
-        throw runtime_error("\n[importFromFile]: registered_users.txt failed to open.");
+        throw runtime_error("\n[importFromFile]: resources.txt failed to open.");
 
     resourcesIn >> count;
     resourcesIn.ignore(10000, '\n');
@@ -254,7 +254,7 @@ void ReservationSystem::importFromFiles() {
     ifstream reservationsIn("reservations.txt");
 
     if (!reservationsIn)
-        throw runtime_error("\n[importFromFile]: registered_users.txt failed to open.");
+        throw runtime_error("\n[importFromFile]: reservations.txt failed to open.");
 
     reservationsIn >> count;
     reservationsIn.ignore(10000, '\n');
