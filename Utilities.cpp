@@ -175,7 +175,21 @@ string getResourceName()
 
 TimeRange getAvailability()
 {
+    // Variables
+    int startTime{};
+    int endTime{};
 
+    // Get opening time from user
+    cout << "Opening Time [24hr]: ";
+    cin >> startTime;
+    cin.ignore(10000, '\n');
+
+    // Get closing time from user
+    cout << "Closing Time [24hr]: ";
+    cin >> endTime;
+    cin.ignore(10000, '\n');
+
+    return TimeRange(startTime, endTime);
 }
 
 int getCapacity()
