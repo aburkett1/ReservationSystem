@@ -14,35 +14,37 @@ using namespace std;
 
 class ReservationSystem {
 public:
-    ReservationSystem()
-        : localUser(nullptr)
-    {}
+    // Constructors
+    ReservationSystem() {}
     ~ReservationSystem();
 
-    // All users
-    void login(string username);
-    void listResources() const;
-    vector<Resource*> searchTitle(string name) const;
-    Resource* searchID(int id) const;
-    void filterResourceType(ResourceType resourceFlag) const;
-
-    // Student
-    void createReservation(Resource* resource, TimeRange timeSlot);
+    // Login
+    User* login();
+    void registerUser();
+    
+    // Reservation
+    void createReservation(Resource* resource, DateAndTimeRange timeSlot, User* user);
     void modifyReservation(Reservation* reservation, TimeRange newTimeSlot);
-    vector<Reservation*> viewReservation() const;
     void cancelReservation(Reservation* reservation);
-
-    // Admin
+    vector<Reservation*> viewReservation(User* client) const;
+    
+    // Resource Creation
     void addResource(Resource* resource);
-    void removeResource(Resource* resource);
     void editResource(Resource* resource);
-
+    void removeResource(Resource* resource);
+    void listResources() const;
+    
+    // Resource Utility
+    Resource* searchID(int id) const;
+    vector<Resource*> searchTitle(string name) const;
+    void filterResourceType(ResourceType resourceFlag) const;
+    vector<int> checkAvailability(Resource* resource, string date);
+    
     // File IO
     void exportToFile(ofstream& out);
     void importFromFile(ifstream& in);
 
 private:
-    User* localUser;
     vector<User*> registeredUsers;
     vector<Resource*> resources;
     vector<Reservation*> reservations;

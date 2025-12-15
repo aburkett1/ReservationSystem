@@ -1,8 +1,10 @@
 #include "ReservationSystem.h"
 
-ReservationSystem::~ReservationSystem() {
-    delete localUser;
-    
+// ========================================================================
+// MARK: Constructors
+// ========================================================================
+
+ReservationSystem::~ReservationSystem() {    
     for (User* user : registeredUsers)
         delete user;
 
@@ -13,56 +15,107 @@ ReservationSystem::~ReservationSystem() {
         delete reservation;
 }
 
-void ReservationSystem::listResources() const {
-    for (Resource* r : resources) {
-        r->print();
-        cout << endl;
-    }
+// ========================================================================
+// MARK: Login
+// ========================================================================
+
+User* ReservationSystem::login()
+{
+
+}
+
+void ReservationSystem::registerUser()
+{
+
 }
 
 // ========================================================================
-// MARK: Searches
+// MARK: Reservation
 // ========================================================================
 
-vector<Resource*> ReservationSystem::searchTitle(string name) const
+void ReservationSystem::createReservation(Resource* resource, DateAndTimeRange timeSlot, User* user)
 {
-    // Initializing Vector
-    vector<Resource*> title;
+    Reservation* reservation = new Reservation(user, resource, timeSlot);
+    reservations.push_back(reservation);
+}
 
-    // For every resource stored in system, if name with corresponding
-    // resource is the same as user's name, then add it to title vector
-    for (Resource* resource : resources)
-    {
-        if (resource->getTitle() == name)
-        {
-            title.push_back(resource);
+void ReservationSystem::modifyReservation(Reservation* reservation, TimeRange newTimeSlot) {
+    if (reservation == nullptr) {
+        cout << "Error: invalid reservation pointer." << endl;
+        return;
+    }
+
+    // Get current data from the reservation
+    Resource* res = reservation->getResource();
+    DateAndTimeRange currentSlot = reservation->getTimeSlot();
+
+    //new dateandtimerange, WORTH CHECKING FOR ITS congruencY
+    DateAndTimeRange updatedSlot(
+        newTimeSlot.startHour,
+        newTimeSlot.endHour,
+        currentSlot.date
+    );
+
+    // Basic validation: start < end
+    if (updatedSlot.startHour >= updatedSlot.endHour) {
+        cout << "Error: start time must be earlier than end time." << endl;
+        return;
+    }
+
+    // Check for conflicts with other reservations on the same resource and date
+    for (Reservation* r : reservations) {
+        if (r == reservation) continue; //skip the reservation modifying
+
+        if (r->getResource() == res) {
+            DateAndTimeRange otherSlot = r->getTimeSlot();
+
+            if (otherSlot.date == updatedSlot.date) {
+                bool overlap = !(updatedSlot.endHour <= otherSlot.startHour ||
+                                 updatedSlot.startHour >= otherSlot.endHour);
+
+                if (overlap) {
+                    cout << "Error: new time slot conflicts with an existing reservation."
+                         << endl;
+                    return;
+                }
+            }
         }
     }
 
-    // Return all matching title resources or empty if none are
-    // found
-    return title;
-};
+    // If here then no conflict was found so update the reservation
+    reservation->setTimeSlot(updatedSlot);
+    cout << "Reservation successfully updated." << endl;
+}
 
-Resource* ReservationSystem::searchID(int id) const
+void ReservationSystem::cancelReservation(Reservation* reservation)
 {
-    // For each resource in the system, if ID with corresponding
-    // resource matches user ID, then return it
-    for (Resource* resource : resources)
+    for (auto i = reservations.begin(); i != reservations.end(); ++i)
     {
-        if (resource->getID() == id)
+        if (*i == reservation)
         {
-            return resource;
+            delete *i;
+            reservations.erase(i);
+            return;
+        }
+    }
+}
+
+vector<Reservation*> ReservationSystem::viewReservation(User* client) const
+{
+    vector<Reservation*> result;
+
+    for (Reservation* r : reservations) {
+        // Check my implementation of getUser()
+        if (r->getUser() == client) {
+            result.push_back(r);
         }
     }
 
-    // If no resource was found with that searched ID, then
-    // return nullptr
-    return nullptr;
-};
+    return result;
+}
 
 // ========================================================================
-// MARK: Admin
+// MARK: Resource Creation
 // ========================================================================
 
 void ReservationSystem::addResource(Resource* resource) {
@@ -176,6 +229,137 @@ void ReservationSystem::removeResource(Resource* resource) {
 	resources.erase(resources.begin() + resourceLocation);
 }
 
+void ReservationSystem::listResources() const {
+    for (Resource* r : resources) {
+        r->print();
+        cout << endl;
+    }
+}
+
+// ========================================================================
+// MARK: Resource Utility
+// ========================================================================
+
+Resource* ReservationSystem::searchID(int id) const
+{
+    // For each resource in the system, if ID with corresponding
+    // resource matches user ID, then return it
+    for (Resource* resource : resources)
+    {
+        if (resource->getID() == id)
+        {
+            return resource;
+        }
+    }
+
+    // If no resource was found with that searched ID, then
+    // return nullptr
+    return nullptr;
+}
+
+vector<Resource*> ReservationSystem::searchTitle(string name) const
+{
+    // Initializing Vector
+    vector<Resource*> title;
+
+    // For every resource stored in system, if name with corresponding
+    // resource is the same as user's name, then add it to title vector
+    for (Resource* resource : resources)
+    {
+        if (resource->getTitle() == name)
+        {
+            title.push_back(resource);
+        }
+    }
+
+    // Return all matching title resources or empty if none are
+    // found
+    return title;
+}
+
+void ReservationSystem::filterResourceType(ResourceType resourceFlag) const
+{
+    int choice;
+
+    cout << "Select resource type:\n";
+    cout << "0 - Music Room\n";
+    cout << "1 - Study Room\n";
+    cout << "Enter choice: ";
+    cin >> choice;
+
+    if (choice != MUSIC_ROOM && choice != STUDY_ROOM)
+    {
+        cout << "invalid resource type\n";
+        return;
+    }
+
+    resourceFlag = static_cast<ResourceType>(choice);
+    
+    for (Reservation* reservation : reservations)
+    {
+        Resource* res = reservation->getResource();
+
+        if (resourceFlag == MUSIC_ROOM)
+        {
+            if (dynamic_cast<MusicRoom*>(res))
+            {
+                res->print();
+                cout << endl;
+            }
+        }
+        else if (resourceFlag == STUDY_ROOM)
+        {
+            if (dynamic_cast<StudyRoom*>(res))
+            {
+                res->print();
+                cout << endl;
+            }
+        }
+    }
+}
+
+vector<int> ReservationSystem::checkAvailability(Resource* resource, string date)
+{
+    // Variables
+    TimeRange availability{};
+    vector<int> avialableTimeSlots{};
+
+    // Get availablility
+    availability = resource->getAvailabilityHours();
+
+    // Create time slots
+    for (int i = availability.startHour; i < availability.endHour; i++)
+    {
+        avialableTimeSlots.push_back(i);
+    }
+
+    // Check against reservations.
+    for (auto reservation : reservations)
+    {
+        DateAndTimeRange timeSlot = reservation->getTimeSlot();
+        if (date == timeSlot.date)
+        {
+            for (int i = timeSlot.startHour; i < timeSlot.endHour; i++)
+            {
+                // Set hour as unavailable
+                avialableTimeSlots[i] = -1;
+            }
+        }
+    }
+
+    // Remove unavailable time slots
+    for (int i = avialableTimeSlots.size() - 1; i >= 0; i--)
+    {
+        if (avialableTimeSlots[i] == -1)
+        {
+            avialableTimeSlots.erase(avialableTimeSlots.begin()+i);
+        }
+    }
+
+    return avialableTimeSlots;
+}
+
+
 // ========================================================================
 // MARK: File IO
 // ========================================================================
@@ -280,130 +464,4 @@ Reservation* ReservationSystem::importReservation(ifstream& fin) {
         throw runtime_error("\n[importReservation]: Reservation user or resource is invalid.");
   
     return new Reservation(user, resource, timeSlot);
-}
-
-
-void ReservationSystem::cancelReservation(Reservation* reservation)
-{
-    for (auto i = reservations.begin(); i != reservations.end(); ++i)
-    {
-        if (*i == reservation)
-        {
-            delete *i;
-            reservations.erase(i);
-            return;
-        }
-    }
-}
-
-
-
-void ReservationSystem::filterResourceType(ResourceType resourceFlag) const
-{
-    int choice;
-
-    cout << "Select resource type:\n";
-    cout << "0 - Music Room\n";
-    cout << "1 - Study Room\n";
-    cout << "Enter choice: ";
-    cin >> choice;
-
-    if (choice != MUSIC_ROOM && choice != STUDY_ROOM)
-    {
-        cout << "invalid resource type\n";
-        return;
-    }
-
-    resourceFlag = static_cast<ResourceType>(choice);
-    
-    for (Reservation* reservation : reservations)
-    {
-        Resource* res = reservation->getResource();
-
-        if (resourceFlag == MUSIC_ROOM)
-        {
-            if (dynamic_cast<MusicRoom*>(res))
-            {
-                res->print();
-                cout << endl;
-            }
-        }
-        else if (resourceFlag == STUDY_ROOM)
-        {
-            if (dynamic_cast<StudyRoom*>(res))
-            {
-                res->print();
-                cout << endl;
-            }
-        }
-    }
-}
-
-
-vector<Reservation*> ReservationSystem::viewReservation() const
-{
-    vector<Reservation*> result;
-
-    if (localUser == nullptr) {
-        cout << "No user is currently logged in." << endl;
-        return result;
-    }
-
-    for (Reservation* r : reservations) {
-        // Chekc my implementation of getUser()
-        if (r->getUser() == localUser) {
-            result.push_back(r);
-        }
-    }
-
-    return result;
-}
-
-
-void ReservationSystem::modifyReservation(Reservation* reservation, TimeRange newTimeSlot) {
-    if (reservation == nullptr) {
-        cout << "Error: invalid reservation pointer." << endl;
-        return;
-    }
-
-    // Get current data from the reservation
-    Resource* res = reservation->getResource();
-    DateAndTimeRange currentSlot = reservation->getTimeSlot();
-
-    //new dateandtimerange, WORTH CHECKING FOR ITS congruencY
-    DateAndTimeRange updatedSlot(
-        newTimeSlot.startHour,
-        newTimeSlot.endHour,
-        currentSlot.date
-    );
-
-    // Basic validation: start < end
-    if (updatedSlot.startHour >= updatedSlot.endHour) {
-        cout << "Error: start time must be earlier than end time." << endl;
-        return;
-    }
-
-    // Check for conflicts with other reservations on the same resource and date
-    for (Reservation* r : reservations) {
-        if (r == reservation) continue; //skip the reservation modifying
-
-        if (r->getResource() == res) {
-            DateAndTimeRange otherSlot = r->getTimeSlot();
-
-            if (otherSlot.date == updatedSlot.date) {
-                bool overlap = !(updatedSlot.endHour <= otherSlot.startHour ||
-                                 updatedSlot.startHour >= otherSlot.endHour);
-
-                if (overlap) {
-                    cout << "Error: new time slot conflicts with an existing reservation."
-                         << endl;
-                    return;
-                }
-            }
-        }
-    }
-
-    // If here then no conflict was found so update the reservation
-    reservation->setTimeSlot(updatedSlot);
-    cout << "Reservation successfully updated." << endl;
 }

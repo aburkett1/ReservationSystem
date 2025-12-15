@@ -2,6 +2,7 @@
 #define UTILITIES_H_
 
 #include "Menu.h"
+#include "Resource.h"
 
 
 // Constants
@@ -12,6 +13,12 @@ vector<Menu> setupMenus();
 
 // User Input
 void pressEnterToContinue();
+int getResourceId();
+string getFileName();
+string getDate();
+
+template <typename T>
+int userSelection(vector<T>& results);
 
 // Output
 void printLine(int lineWidth = LINE_WIDTH);
@@ -25,6 +32,13 @@ void displayTitle(T title)
 	printLine();
 }
 
+void displayStartTimes(vector<int> timeSlots);
+void displayEndTimes(vector<int> timeSlots, int startTime);
+
 void clearScreen();
+
+// Utility
+string timeConverter(int time24hr);
+
 
 #endif

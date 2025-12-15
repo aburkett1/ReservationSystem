@@ -13,9 +13,7 @@ enum UserType {
 
 class User {
 public:
-    User()
-        : name(""), id(0), type(ADMIN)
-    {}
+    User(): name(""), id(0), type(ADMIN) {}
 
     string getName() const { return name; }
     int getID() const { return id; }

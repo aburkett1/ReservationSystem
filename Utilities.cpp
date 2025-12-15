@@ -140,6 +140,80 @@ void pressEnterToContinue() {
     cin.ignore(10000, '\n');
 }
 
+string getFileName()
+{
+    // Variables
+    string fileName{};
+
+    // Get group from user
+    cout << "File Name: ";
+    getline(cin, fileName);
+
+    return fileName;
+}
+
+int getResourceId()
+{
+    // Variables
+    int id{};
+
+    // Get id from user
+    cout << "ID: ";
+    cin >> id;
+    cin.ignore(10000, '\n');
+
+    return id;
+}
+
+string getDate()
+{
+    // Variables
+    string date{};
+
+    // Get date from user
+    cout << "Date [MM/DD/YYYY]: ";
+    getline(cin, date);
+
+    return date;
+}
+
+template <typename T>
+int userSelection(vector<T>& results)
+{
+    // Variables
+    int selection{};
+    bool valid = false;
+
+    while (!valid) {
+        cout << "Select Contact Option (1-" << results.size() << "), enter 0 to cancel: ";
+
+        // Check for numerical input
+        if (!(cin >> selection)) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            printLine();
+            cout << "Invalid input.\nPlease select Resource Option (1-" << results.size() << "), enter 0 to cancel.\n";
+            printLine();
+        } else {
+            cin.ignore(10000, '\n');
+
+            // Allows for user to return to previous page
+            if (selection == 0) return -1;
+
+            if (selection < 1 || selection > results.size()) {
+                printLine();
+                cout << "Invalid input.\nPlease select Resource Option (1-" << results.size() << "), enter 0 to cancel.\n";
+                printLine();
+            } else {
+                valid = true;
+            }
+        }
+    }
+
+    // Return index
+    return selection - 1;
+}
+
 
 // =============================================================================
 // MARK: Output
@@ -152,10 +226,58 @@ void printLine(int lineWidth)
     cout << setfill(' ');
 }
 
+void displayStartTimes(vector<int> timeSlots)
+{
+    displayTitle("START TIMES");
+    
+    for (int i = 0; i < timeSlots.size(); i++)
+    {
+        displayTitle(i+1);
+        cout << timeConverter(timeSlots[i]);
+    }
+
+}
+
+void displayEndTimes(vector<int> timeSlots, int startTime)
+{
+    displayTitle("END TIMES");
+    
+    for (int i = timeSlots[startTime]; i != -1; i++)
+    {
+        displayTitle(i+1);
+        cout << timeConverter(timeSlots[i] + 1);
+    }
+}
+
 void clearScreen() {
     #ifdef _WIN32
         system("cls");
     #else
         system("clear");
     #endif
+}
+
+
+// =============================================================================
+// MARK: Utility
+// =============================================================================
+
+string timeConverter(int time24hr)
+{
+    if (time24hr == 0)
+    {
+        return "12 AM";
+    }
+    else if (time24hr == 12)
+    {
+        return "12 PM";
+    }
+    else if (time24hr > 12)
+    {
+        return to_string(time24hr - 12) + " PM";
+    }
+    else 
+    {
+        return to_string(time24hr) + " AM";
+    }
 }
