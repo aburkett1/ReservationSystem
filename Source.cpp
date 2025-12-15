@@ -116,8 +116,16 @@ int main()
             {
             case 1: // MARK: Login
                 // Get client details
-                clientDetails = reservationSystem.login();
-                
+                try
+                {
+                    clientDetails = reservationSystem.login();
+                }
+                catch(const exception& e)
+                {
+                    cout << e.what() << '\n';
+                    pressEnterToContinue();
+                }
+                                
                 // Verify User exists
                 if (clientDetails)
                 {
@@ -268,9 +276,18 @@ int main()
                                 break;
                             
                             case 3: // Save System
-                                reservationSystem.exportToFiles();
+                                try
+                                {
+                                    reservationSystem.exportToFiles();
+                                    cout << "System Saved Successfully" << endl;
+                                }
+                                catch(const exception& e)
+                                {
+                                    cerr << e.what() << '\n';
+                                }
+                                pressEnterToContinue();
+
                                 break;
-                            
                             
                             default:
                                 break;
@@ -380,12 +397,25 @@ int main()
                                 break;
                             
                             case 3: // Save System
-                                reservationSystem.exportToFiles();
+                                try
+                                {
+                                    reservationSystem.exportToFiles();
+                                    cout << "System Saved Successfully" << endl;
+                                }
+                                catch(const exception& e)
+                                {
+                                    cerr << e.what() << '\n';
+                                }
+                                pressEnterToContinue();
+                                
                                 break;
                             
                             default:
                                 break;
                             }
+
+                            clearScreen();
+                            selection = adminMenu.displayMenu();
                         }
                         break;
                     
@@ -396,6 +426,7 @@ int main()
                 break;
 
             case 2: // Register
+                clearScreen();
                 reservationSystem.registerUser();
                 break;
             
