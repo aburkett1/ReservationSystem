@@ -38,10 +38,10 @@ public:
     void editResource(Resource* resource);
 
     // File IO
-    void exportToFile(ofstream& out);
-    void importFromFile(ifstream& in);
+    void exportToFiles();
+    void importFromFiles();
 
-private:
+// private:
     User* localUser;
     vector<User*> registeredUsers;
     vector<Resource*> resources;
