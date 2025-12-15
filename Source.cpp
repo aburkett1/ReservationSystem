@@ -67,14 +67,11 @@ int main()
                         View Reservations
                             Modify Reservation
                             Cancel Reservation
-                        Save System Details
+                        Save System
                     if (Admin)
                         Add Resource
                         View Resources
                             List all
-                                Select Resource
-                                    Edit Resource
-                                    Remove Resource
                             Search by ID
                                 Select Resource
                                     Edit Resource
@@ -87,7 +84,7 @@ int main()
                                 Select Resource
                                     Edit Resource
                                     Remove Resource
-                        Save System Details
+                        Save System
                 Register
             New System
             
@@ -272,7 +269,7 @@ int main()
                                 break;
                             
                             case 3: // Save System
-                                /* code */
+                                reservationSystem.exportToFiles();
                                 break;
                             
                             
@@ -286,7 +283,111 @@ int main()
                         break;
 
                     case ADMIN: // MARK: Admin
-                        /* code */
+                        selection = adminMenu.displayMenu();
+                        while (selection != 0)
+                        {
+                            switch (selection)
+                            {
+                            case 1: // Add Resource
+                                selection = resourceTypeMenu.displayMenu();
+                                if (selection != 0)
+                                {
+                                    selectedResource = createResource(ResourceType(selection));
+                                    reservationSystem.addResource(selectedResource);
+                                }
+                                
+                                break;
+                            
+                            case 2: // View Resources
+                                selection = viewResourcesMenu.displayMenu();
+
+                                while (selection != 0)
+                                {
+                                    switch (selection)
+                                    {
+                                    case 1: // List all
+                                        reservationSystem.listResources();
+                                        pressEnterToContinue();
+                                        break;
+                                    
+                                    // MARK: Resource Filtering
+                                    case 2: // Search by ID
+                                        selectedResource = reservationSystem.searchID(getResourceId());
+                                        break;
+                                    
+                                    case 3: // Search by Name
+                                        resourceSearchResults = reservationSystem.searchTitle(getResourceName());
+                                        displayResources(resourceSearchResults);
+                                        selectedResource = resourceSearchResults[userSelection(resourceSearchResults)];
+                                        break;
+                                    
+                                    case 4: // Filter By Resource Type
+                                        selection = resourceTypeMenu.displayMenu();
+
+                                        if (selection != 0)
+                                        {
+                                            resourceSearchResults = reservationSystem.filterResourceType(ResourceType(selection));
+                                            displayResources(resourceSearchResults);
+                                            selectedResource = resourceSearchResults[userSelection(resourceSearchResults)];
+                                        }
+                                        break;
+                                    
+                                    default:
+                                        break;
+                                    }
+
+                                    // MARK: Reservation Creation
+                                    clearScreen();
+                                    switch (selection)
+                                    {
+                                    case 2: // Search by ID
+                                    case 3: // Search by Name
+                                    case 4: // Filter By Resource Type
+                                        if (selectedResource)
+                                        {
+                                            // Print Resource
+                                            selectedResource->print();
+
+                                            selection = modifyResourceMenu.displayMenu();
+                                            while(selection != 0)
+                                            {
+                                                switch (selection)
+                                                {
+                                                case 1: // Edit Resource
+                                                    reservationSystem.editResource(selectedResource);
+                                                    break;
+                                                
+                                                case 2: // Remove Resource
+                                                    reservationSystem.removeResource(selectedResource);
+                                                    break;
+                                                
+                                                default:
+                                                    break;
+                                                }
+
+                                                clearScreen();
+                                                selection = modifyResourceMenu.displayMenu();
+                                            }
+                                        }
+                                        break;
+                                    
+                                    default:
+                                        break;
+                                    }
+
+                                    clearScreen();
+                                    selection = viewResourcesMenu.displayMenu();
+                                }
+                                break;
+                            
+                            case 3: // Save System
+                                reservationSystem.exportToFiles();
+                                break;
+                            
+                            default:
+                                break;
+                            }
+                        }
                         break;
                     
                     default:

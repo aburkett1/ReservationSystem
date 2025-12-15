@@ -2,6 +2,13 @@
 #include "MusicRoom.h"
 #include "StudyRoom.h"
 
+Resource::Resource(string title, TimeRange availability)
+{
+    this->id = nextId++;
+    this->title = title;
+    this->availabilityHours = availability;
+}
+
 Resource* Resource::importResource(ifstream& fin) {
     int temp;
     fin >> temp;

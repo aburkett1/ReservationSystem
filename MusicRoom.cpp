@@ -1,5 +1,13 @@
 #include "MusicRoom.h"
 
+MusicRoom::MusicRoom(string title, TimeRange availability, int capacity, string location, bool soundproof)
+: Resource(title, availability)
+{
+    this->capacity = capacity;
+    this->location = location;
+    this->soundproof = soundproof;
+}
+
 void MusicRoom::print() const {
     cout << left;
     cout << "--------------------------------" << "\n";

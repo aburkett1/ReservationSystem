@@ -10,9 +10,8 @@ using namespace std;
 
 class StudyRoom : public Resource {
 public:
-    StudyRoom()
-        : capacity(0), location(""), whiteboardAmount(0)
-    {}
+    StudyRoom(): capacity(0), location(""), whiteboardAmount(0) {}
+    StudyRoom(string title, TimeRange availability, int capacity, string location, int whiteboardAmount);
 
     int getCapacity() const { return capacity; }
     string getLocation() const { return location; }
