@@ -52,6 +52,7 @@ private:
     // Helpers
     User* searchUsersById(int id) const;
     Reservation* importReservation(ifstream& fin);
+    User* searchUsersByName(string name) const;
 };
 
 #endif

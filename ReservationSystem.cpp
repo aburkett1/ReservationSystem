@@ -21,12 +21,66 @@ ReservationSystem::~ReservationSystem() {
 
 User* ReservationSystem::login()
 {
+    string username;
+    cout << "Please enter username: ";
+    getline(cin, username);
 
+    User* user = searchUsersByName(username);
+
+    if (user == nullptr)
+        throw runtime_error("\n[login]: Username authentication failed.");
+
+    return user;
 }
 
 void ReservationSystem::registerUser()
 {
+    string username;
+    int type{};
+    bool valid = false;
 
+    cout << "--------------------------------" << '\n';
+    cout << " ====  User Type Options   ==== " << '\n';
+    cout << "--------------------------------" << '\n';
+    cout << "\t0 - Admin\n";
+    cout << "\t1 - Student\n";
+    cout << "--------------------------------" << '\n';
+
+    while (!valid) {
+        cout << "Please select type option (0-1): ";
+
+        if (!(cin >> type)) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "-----------------------------------------------\n";
+            cout << "Invalid Input. Please select type option (0-1).\n";
+            cout << "-----------------------------------------------\n";
+        } else {
+            cin.ignore(10000, '\n');
+
+            if (type < 0 || type > 1) {
+                cout << "-----------------------------------------------\n";
+                cout << "Invalid Input. Please select type option (0-1).\n";
+                cout << "-----------------------------------------------\n";
+            } else {
+                valid = true;
+            }
+        }
+    }
+
+    cout << "Please enter username: ";
+    getline(cin, username);
+    
+    User* userPtr = searchUsersByName(username);
+
+    if (userPtr != nullptr) {
+        cout << "\nUser with that username already exists.\n";
+    } else {
+        User* newUser = new User(username, static_cast<UserType>(type));
+        registeredUsers.push_back(newUser);
+
+        cout << "\nUser registered.\n";
+    }
 }
 
 // ========================================================================
@@ -40,10 +94,8 @@ void ReservationSystem::createReservation(Resource* resource, DateAndTimeRange t
 }
 
 void ReservationSystem::modifyReservation(Reservation* reservation, TimeRange newTimeSlot) {
-    if (reservation == nullptr) {
-        cout << "Error: invalid reservation pointer." << endl;
-        return;
-    }
+    if (reservation == nullptr)
+        throw runtime_error("\n[modifyReservation]: Invalid reservation pointer.");
 
     // Get current data from the reservation
     Resource* res = reservation->getResource();
@@ -57,10 +109,8 @@ void ReservationSystem::modifyReservation(Reservation* reservation, TimeRange ne
     );
 
     // Basic validation: start < end
-    if (updatedSlot.startHour >= updatedSlot.endHour) {
-        cout << "Error: start time must be earlier than end time." << endl;
-        return;
-    }
+    if (updatedSlot.startHour >= updatedSlot.endHour)
+        throw runtime_error("\n[modifyReservation]: Start time must be earlier than end time.");
 
     // Check for conflicts with other reservations on the same resource and date
     for (Reservation* r : reservations) {
@@ -73,11 +123,8 @@ void ReservationSystem::modifyReservation(Reservation* reservation, TimeRange ne
                 bool overlap = !(updatedSlot.endHour <= otherSlot.startHour ||
                                  updatedSlot.startHour >= otherSlot.endHour);
 
-                if (overlap) {
-                    cout << "Error: new time slot conflicts with an existing reservation."
-                         << endl;
-                    return;
-                }
+                if (overlap)
+                    throw runtime_error("\n[modifyReservation]: New time slot conflicts with an existing reservation.");
             }
         }
     }
@@ -386,6 +433,8 @@ void ReservationSystem::exportToFiles() {
 }
 
 void ReservationSystem::importFromFiles() {
+    User::resetNextId();
+
     // ==== Import registeredUsers ====
     ifstream userIn("registered_users.txt");
 
@@ -467,4 +516,14 @@ Reservation* ReservationSystem::importReservation(ifstream& fin) {
         throw runtime_error("\n[importReservation]: Reservation user or resource is invalid.");
   
     return new Reservation(user, resource, timeSlot);
+}
+
+User* ReservationSystem::searchUsersByName(string name) const {
+    for (int i = 0; i < registeredUsers.size(); i++) {
+        if (registeredUsers[i]->getName() == name) {
+            return registeredUsers[i];
+        }
+    }
+
+    return nullptr;
 }
