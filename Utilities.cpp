@@ -287,43 +287,6 @@ Resource* createResource(ResourceType type)
 
 }
 
-template <typename T>
-int userSelection(vector<T>& results)
-{
-    // Variables
-    int selection{};
-    bool valid = false;
-
-    while (!valid) {
-        cout << "Select option (1-" << results.size() << "), enter 0 to cancel: ";
-
-        // Check for numerical input
-        if (!(cin >> selection)) {
-            cin.clear();
-            cin.ignore(10000, '\n');
-            printLine();
-            cout << "Invalid input.\nPlease select option (1-" << results.size() << "), enter 0 to cancel.\n";
-            printLine();
-        } else {
-            cin.ignore(10000, '\n');
-
-            // Allows for user to return to previous page
-            if (selection == 0) return -1;
-
-            if (selection < 1 || selection > results.size()) {
-                printLine();
-                cout << "Invalid input.\nPlease select option (1-" << results.size() << "), enter 0 to cancel.\n";
-                printLine();
-            } else {
-                valid = true;
-            }
-        }
-    }
-
-    // Return index
-    return selection - 1;
-}
-
 
 // =============================================================================
 // MARK: Output
