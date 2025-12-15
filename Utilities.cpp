@@ -124,6 +124,14 @@ vector<Menu> setupMenus()
     };
     Menu modifyResourceMenu = Menu("RESOURCE DETAILS", modifyResourceMenuOptions);
     menus.push_back(modifyResourceMenu);
+
+    // Resource Type Menu
+    vector<string> resourceTypeMenuOptions = {
+        "Music Room",
+        "Study Room"
+    };
+    Menu resourceTypeMenu = Menu("RESOURCE TYPE", resourceTypeMenuOptions);
+    menus.push_back(resourceTypeMenu);
     
 
     // Return vector of all Menus.
@@ -165,6 +173,18 @@ int getResourceId()
     return id;
 }
 
+string getResourceName()
+{
+    // Variables
+    string name{};
+
+    // Get name from user
+    cout << "Name: ";
+    getline(cin, name);
+
+    return name;
+}
+
 string getDate()
 {
     // Variables
@@ -185,14 +205,14 @@ int userSelection(vector<T>& results)
     bool valid = false;
 
     while (!valid) {
-        cout << "Select Contact Option (1-" << results.size() << "), enter 0 to cancel: ";
+        cout << "Select option (1-" << results.size() << "), enter 0 to cancel: ";
 
         // Check for numerical input
         if (!(cin >> selection)) {
             cin.clear();
             cin.ignore(10000, '\n');
             printLine();
-            cout << "Invalid input.\nPlease select Resource Option (1-" << results.size() << "), enter 0 to cancel.\n";
+            cout << "Invalid input.\nPlease select option (1-" << results.size() << "), enter 0 to cancel.\n";
             printLine();
         } else {
             cin.ignore(10000, '\n');
@@ -202,7 +222,7 @@ int userSelection(vector<T>& results)
 
             if (selection < 1 || selection > results.size()) {
                 printLine();
-                cout << "Invalid input.\nPlease select Resource Option (1-" << results.size() << "), enter 0 to cancel.\n";
+                cout << "Invalid input.\nPlease select option (1-" << results.size() << "), enter 0 to cancel.\n";
                 printLine();
             } else {
                 valid = true;
@@ -246,6 +266,58 @@ void displayEndTimes(vector<int> timeSlots, int startTime)
     {
         displayTitle(i+1);
         cout << timeConverter(timeSlots[i] + 1);
+    }
+}
+
+void displayReservations(vector<Reservation*>& results)
+{
+    displayTitle("SELECT RESERVATION");
+    
+    for (int i = 0; i < results.size(); i++)
+    {
+        displayTitle(i+1);
+        cout << results[i]->getResource()->getTitle() << endl;
+        displayTimeSlot(results[i]->getTimeSlot());
+    }
+}
+
+void displayReservation(Reservation*& selectedReservation)
+{
+    //dynamically cast resource as a new musicRoom pointer
+	MusicRoom* musicRoom = dynamic_cast<MusicRoom*>(selectedReservation->getResource());
+
+    //dynamically cast resource as a new studyRoom pointer
+	StudyRoom* studyRoom = dynamic_cast<StudyRoom*>(selectedReservation->getResource());
+    
+    // Print Resource
+    if (musicRoom)
+    {
+        musicRoom->print();
+    }
+    else if (studyRoom)
+    {
+        studyRoom->print();
+    }
+
+    cout << "Reserved on ";
+    displayTimeSlot(selectedReservation->getTimeSlot());
+}
+
+void displayTimeSlot(DateAndTimeRange timeSlot)
+{
+    cout << timeSlot.date << " from "
+         << timeConverter(timeSlot.startHour) << "-" << timeConverter(timeSlot.endHour)
+         << endl;
+}
+
+void displayResources(vector<Resource*>& results)
+{
+    displayTitle("SELECT RESOURCE");
+    
+    for (int i = 0; i < results.size(); i++)
+    {
+        displayTitle(i+1);
+        results[i]->print();
     }
 }
 

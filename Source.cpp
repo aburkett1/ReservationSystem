@@ -7,17 +7,26 @@
 // =============================================================================
 int main()
 {
-    // Variables
-    int selection{};
+    // =============================================================================
+    // MARK: Variables
+    // =============================================================================
+    // System
     ReservationSystem reservationSystem = ReservationSystem();
     User* clientDetails = nullptr;
+    int selection{};
+    
+    // Resources
+    vector<Resource*> resourceSearchResults;
     Resource* selectedResource = nullptr;
-    DateAndTimeRange selectedDateTime{};
+
+    // Reservations
+    vector<Reservation*> reservationSearchResults;
+    Reservation* selectedReservation = nullptr;
+
+    // Time Slots
     vector<int> availableTimeSlots{};
-    int id{};
-    string resourceName{};
-    ifstream fin;
-    ofstream fout;
+    DateAndTimeRange selectedDateTime{};
+    
 
     // =============================================================================
     // MARK: Menu Creation
@@ -32,6 +41,7 @@ int main()
     Menu reservationCreationMenu = menus[5];
     Menu viewReservationsMenu = menus[6];
     Menu modifyResourceMenu = menus[7];
+    Menu resourceTypeMenu = menus[8];
     
     /*
         // =========================================================================
@@ -46,11 +56,8 @@ int main()
                     if (Student)
                         View Resources
                             List all
-                                Select Resource
-                                    Create Reservation
                             Search by ID
-                                Select Resource
-                                    Create Reservation
+                                Create Reservation
                             Search by Name
                                 Select Resource
                                     Create Reservation
@@ -90,36 +97,14 @@ int main()
 
     while (selection != 0)
     {
+        // Reset Reservation System
+        reservationSystem = ReservationSystem();
+
         switch (selection)
         {
         case 1: // MARK: Load System Details
-            fin.open(getFileName());
-            if(fin)
-                    {
-                        // Reset Reservation System
-                        reservationSystem = ReservationSystem();
-                        
-                        // Import file
-                        reservationSystem.importFromFile(fin);
-                        fin.close();
-
-                        // Display success message
-                        cout << endl << "Data Imported Successfully." << endl;
-                        pressEnterToContinue();
-                    }
-                    else
-                    {
-                        // Display failure message
-                        cout << endl << "File could not be found." << endl;
-                        pressEnterToContinue();
-                    }
-                    break;
-
-        case 2: // New System
-
-            // Reset Reservation System
-            reservationSystem = ReservationSystem();
-
+            // Import file
+            reservationSystem.importFromFiles();
             break;
         
         default:
@@ -161,10 +146,39 @@ int main()
                                         pressEnterToContinue();
                                         break;
                                     
+                                    // MARK: Reservation Filtering
                                     case 2: // Search by ID
                                         selectedResource = reservationSystem.searchID(getResourceId());
-                                        clearScreen();
+                                        break;
+                                    
+                                    case 3: // Search by Name
+                                        resourceSearchResults = reservationSystem.searchTitle(getResourceName());
+                                        displayResources(resourceSearchResults);
+                                        selectedResource = resourceSearchResults[userSelection(resourceSearchResults)];
+                                        break;
+                                    
+                                    case 4: // Filter By Resource Type
+                                        selection = resourceTypeMenu.displayMenu();
 
+                                        if (selection != 0)
+                                        {
+                                            resourceSearchResults = reservationSystem.filterResourceType(ResourceType(selection));
+                                            displayResources(resourceSearchResults);
+                                            selectedResource = resourceSearchResults[userSelection(resourceSearchResults)];
+                                        }
+                                        break;
+                                    
+                                    default:
+                                        break;
+                                    }
+
+                                    // MARK: Reservation Creation
+                                    clearScreen();
+                                    switch (selection)
+                                    {
+                                    case 2: // Search by ID
+                                    case 3: // Search by Name
+                                    case 4: // Filter By Resource Type
                                         if (selectedResource)
                                         {
                                             // Print Resource
@@ -202,15 +216,6 @@ int main()
                                                 selection = reservationCreationMenu.displayMenu();
                                             }
                                         }
-
-                                        break;
-                                    
-                                    case 3: // Search by Name
-                                        /* code */
-                                        break;
-                                    
-                                    case 4: // Filter By Resource Type
-                                        /* code */
                                         break;
                                     
                                     default:
@@ -222,8 +227,48 @@ int main()
                                 }
                                 break;
                             
-                            case 2: // View Reservations
-                                /* code */
+                            case 2: // MARK: View Reservations
+                                reservationSearchResults = reservationSystem.viewReservation(clientDetails);
+                                displayReservations(reservationSearchResults);
+                                selectedReservation = reservationSearchResults[userSelection(reservationSearchResults)];
+                                
+                                clearScreen();
+                                displayReservation(selectedReservation);
+
+                                selection = viewReservationsMenu.displayMenu();
+                                while (selection != 0)
+                                {
+                                    switch (selection)
+                                    {
+                                    case 1: // Modify Reservation
+                                        // Get date
+                                        selectedDateTime.date = selectedReservation->getTimeSlot().date;
+
+                                        // Get availability
+                                        availableTimeSlots = reservationSystem.checkAvailability(selectedResource, selectedDateTime.date);
+
+                                        // Display Start Time Slots
+                                        displayStartTimes(availableTimeSlots);
+                                        selectedDateTime.startHour = availableTimeSlots[userSelection(availableTimeSlots)];
+
+                                        // Display End Time Slots
+                                        displayEndTimes(availableTimeSlots, selectedDateTime.startHour);
+                                        selectedDateTime.endHour = availableTimeSlots[userSelection(availableTimeSlots)];
+
+                                        reservationSystem.modifyReservation(selectedReservation, selectedDateTime);
+                                        break;
+                                    
+                                    case 2: // Cancel Reservation
+                                        reservationSystem.cancelReservation(selectedReservation);
+                                        break;
+                                    
+                                    default:
+                                        break;
+                                    }
+
+                                    clearScreen();
+                                    selection = viewReservationsMenu.displayMenu();
+                                }
                                 break;
                             
                             case 3: // Save System

@@ -2,8 +2,10 @@
 #define UTILITIES_H_
 
 #include "Menu.h"
+#include "Reservation.h"
 #include "Resource.h"
-
+#include "MusicRoom.h"
+#include "StudyRoom.h"
 
 // Constants
 const int LINE_WIDTH = 79;
@@ -14,7 +16,7 @@ vector<Menu> setupMenus();
 // User Input
 void pressEnterToContinue();
 int getResourceId();
-string getFileName();
+string getResourceName();
 string getDate();
 
 template <typename T>
@@ -34,6 +36,9 @@ void displayTitle(T title)
 
 void displayStartTimes(vector<int> timeSlots);
 void displayEndTimes(vector<int> timeSlots, int startTime);
+void displayResources(vector<Resource*>& results);
+void displayReservations(vector<Reservation*>& results);
+void displayReservation(Reservation*& selectedReservation);
 
 void clearScreen();
 

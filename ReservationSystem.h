@@ -37,7 +37,7 @@ public:
     // Resource Utility
     Resource* searchID(int id) const;
     vector<Resource*> searchTitle(string name) const;
-    void filterResourceType(ResourceType resourceFlag) const;
+    vector<Resource*> filterResourceType(ResourceType resourceFlag) const;
     vector<int> checkAvailability(Resource* resource, string date);
     
     // File IO

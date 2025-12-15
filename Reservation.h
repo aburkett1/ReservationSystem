@@ -10,13 +10,10 @@ using namespace std;
 struct DateAndTimeRange : public TimeRange {
     string date;
 
-    DateAndTimeRange()
-        : TimeRange(), date("")
-    {}
+    DateAndTimeRange(): TimeRange(), date("") {}
 
     DateAndTimeRange(int start, int end, string d)
-        : TimeRange(start, end), date(d)
-    {}
+        : TimeRange(start, end), date(d) {}
 };
 
 class Reservation {
