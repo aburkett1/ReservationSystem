@@ -19,6 +19,26 @@ struct TimeRange {
 
     TimeRange(int start, int end)
         : startHour(start), endHour(end) {}
+
+    static string converter24to12(int time24hr)
+    {
+        if (time24hr == 0)
+        {
+            return "12 AM";
+        }
+        else if (time24hr == 12)
+        {
+            return "12 PM";
+        }
+        else if (time24hr > 12)
+        {
+            return to_string(time24hr - 12) + " PM";
+        }
+        else 
+        {
+            return to_string(time24hr) + " AM";
+        }
+    }
 };
 
 class Resource {

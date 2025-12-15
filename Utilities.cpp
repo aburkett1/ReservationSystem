@@ -306,7 +306,7 @@ void displayStartTimes(vector<int> timeSlots)
     for (int i = 0; i < timeSlots.size(); i++)
     {
         displayTitle(i+1);
-        cout << timeConverter(timeSlots[i]);
+        cout << TimeRange::converter24to12(timeSlots[i]);
     }
 
 }
@@ -318,7 +318,7 @@ void displayEndTimes(vector<int> timeSlots, int startTime)
     for (int i = timeSlots[startTime]; i != -1; i++)
     {
         displayTitle(i+1);
-        cout << timeConverter(timeSlots[i] + 1);
+        cout << TimeRange::converter24to12(timeSlots[i] + 1);
     }
 }
 
@@ -359,7 +359,8 @@ void displayReservation(Reservation*& selectedReservation)
 void displayTimeSlot(DateAndTimeRange timeSlot)
 {
     cout << timeSlot.date << " from "
-         << timeConverter(timeSlot.startHour) << "-" << timeConverter(timeSlot.endHour)
+         << TimeRange::converter24to12(timeSlot.startHour) << "-"
+         << TimeRange::converter24to12(timeSlot.endHour)
          << endl;
 }
 
@@ -380,29 +381,4 @@ void clearScreen() {
     #else
         system("clear");
     #endif
-}
-
-
-// =============================================================================
-// MARK: Utility
-// =============================================================================
-
-string timeConverter(int time24hr)
-{
-    if (time24hr == 0)
-    {
-        return "12 AM";
-    }
-    else if (time24hr == 12)
-    {
-        return "12 PM";
-    }
-    else if (time24hr > 12)
-    {
-        return to_string(time24hr - 12) + " PM";
-    }
-    else 
-    {
-        return to_string(time24hr) + " AM";
-    }
 }

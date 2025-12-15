@@ -47,8 +47,6 @@ void displayResources(vector<Resource*>& results);
 void clearScreen();
 
 // Utility
-string timeConverter(int time24hr);
-
 template <typename T>
 int userSelection(vector<T>& results)
 {

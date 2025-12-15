@@ -15,7 +15,9 @@ void MusicRoom::print() const {
     cout << "--------------------------------" << "\n";
     cout << setw(20) << "ID: " << id << endl;
     cout << setw(20) << "Type: " << "Music Room" << endl;
-    cout << setw(20) << "Availability hours: " << availabilityHours.startHour << " - " << availabilityHours.endHour << endl;
+    cout << setw(20) << "Availability hours: "
+         << availabilityHours.converter24to12(availabilityHours.startHour) << " - " 
+         << availabilityHours.converter24to12(availabilityHours.endHour) << endl;
     cout << setw(20) << "Capacity: "           << capacity << endl;
     cout << setw(20) << "Location: "           << location << endl;
     cout << setw(20) << "Soundproof Status: "  << (soundproof ? "True" : "False") << endl;

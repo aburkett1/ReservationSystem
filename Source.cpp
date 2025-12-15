@@ -308,7 +308,7 @@ int main()
                                 selection = resourceTypeMenu.displayMenu();
                                 if (selection != 0)
                                 {
-                                    selectedResource = createResource(ResourceType(selection));
+                                    selectedResource = createResource(ResourceType(selection-1));
                                     reservationSystem.addResource(selectedResource);
                                 }
                                 
