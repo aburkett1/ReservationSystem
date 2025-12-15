@@ -41,8 +41,8 @@ public:
     vector<int> checkAvailability(Resource* resource, string date);
     
     // File IO
-    void exportToFile(ofstream& out);
-    void importFromFile(ifstream& in);
+    void exportToFiles();
+    void importFromFiles();
 
 private:
     vector<User*> registeredUsers;

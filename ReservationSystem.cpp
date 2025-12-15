@@ -364,74 +364,91 @@ vector<int> ReservationSystem::checkAvailability(Resource* resource, string date
 // MARK: File IO
 // ========================================================================
 
-void ReservationSystem::exportToFile(ofstream& fout) {
-    fout << "LOCAL_USER\n";
-    localUser->exportToFile(fout);
+void ReservationSystem::exportToFiles() {
+    // ==== Export registeredUsers ====
+    ofstream userOut("registered_users.txt");
 
-    fout << "REGISTERED_USERS\n";
+    userOut << registeredUsers.size() << endl;
+
     for (User* user : registeredUsers) {
-        user->exportToFile(fout);
+        user->exportToFile(userOut);
     }
 
-    fout << "RESOURCES\n";
+    userOut.close();
+
+    // ==== Export resources ====
+    ofstream resourceOut("resources.txt");
+
+    resourceOut << resources.size() << endl;
+
     for (Resource* resource : resources) {
-        resource->exportToFile(fout);
+        resource->exportToFile(resourceOut);
     }
 
-    fout << "RESERVATIONS\n";
+    resourceOut.close();
+
+    // ==== Export reservations ====
+    ofstream reservationOut("reservations.txt");
+
+    reservationOut << reservations.size() << endl;
+
     for (Reservation* reservation : reservations) {
-        reservation->exportToFile(fout);
+        reservation->exportToFile(reservationOut);
     }
+
+    reservationOut.close();
 }
 
-void ReservationSystem::importFromFile(ifstream& fin) {
-    // Import localUser
-    string header;
-    getline(fin, header);
+void ReservationSystem::importFromFiles() {
+    // ==== Import registeredUsers ====
+    ifstream userIn("registered_users.txt");
 
-    if (header != "LOCAL_USER")
-        throw runtime_error("\n[importFromFile]: File invalid. Missing LOCAL_USER header.");
+    if (!userIn)
+        throw runtime_error("\n[importFromFile]: registered_users.txt failed to open.");
 
-    localUser = new User();
-    localUser->importFromFile(fin);
-
-    // Import registeredUsers
     int count;
-    fin >> header >> count;
-    fin.ignore(10000, '\n');
-
-    if (header != "REGISTERED_USERS")
-        throw runtime_error("\n[importFromFile]: File invalid. Missing REGISTERED_USERS header.");
+    userIn >> count;
+    userIn.ignore(10000, '\n');
 
     for (int i = 0; i < count; i++) {
         User* user = new User();
-        user->importFromFile(fin);
+        user->importFromFile(userIn);
         registeredUsers.push_back(user);
     }
 
-    // Import resources
-    fin >> header >> count;
-    fin.ignore(10000, '\n');
+    userIn.close();
 
-    if (header != "RESOURCES")
-        throw runtime_error("\n[importFromFile]: File invalid. Missing RESOURCES header.");
+    // ==== Import resources ====
+    ifstream resourcesIn("resources.txt");
+
+    if (!resourcesIn)
+        throw runtime_error("\n[importFromFile]: resources.txt failed to open.");
+
+    resourcesIn >> count;
+    resourcesIn.ignore(10000, '\n');
 
     for (int i = 0; i < count; i++) {
-        Resource* resource = Resource::importResource(fin);
+        Resource* resource = Resource::importResource(resourcesIn);
         resources.push_back(resource);
     }
 
-    // Import reservations
-    fin >> header >> count;
-    fin.ignore(10000, '\n');
+    resourcesIn.close();
 
-    if (header != "RESERVATIONS")
-        throw runtime_error("\n[importFromFile]: File invalid. Missing RESERVATIONS header.");
+    // ==== Import reservations ====
+    ifstream reservationsIn("reservations.txt");
+
+    if (!reservationsIn)
+        throw runtime_error("\n[importFromFile]: reservations.txt failed to open.");
+
+    reservationsIn >> count;
+    reservationsIn.ignore(10000, '\n');
 
     for (int i = 0; i < count; i++) {
-        Reservation* reservation = importReservation(fin);
+        Reservation* reservation = importReservation(reservationsIn);
         reservations.push_back(reservation);
     }
+
+    reservationsIn.close();
 }
 
 // =============================================================================
