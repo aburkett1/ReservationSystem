@@ -41,7 +41,7 @@ public:
     void exportToFiles();
     void importFromFiles();
 
-// private:
+private:
     User* localUser;
     vector<User*> registeredUsers;
     vector<Resource*> resources;
