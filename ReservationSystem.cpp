@@ -182,15 +182,17 @@ void ReservationSystem::editResource(Resource* resource) {
 	string newLocation;
 	
 	//get and set the new Title
-	cout << "Enter New Resource Title: "; 
+	cout << "Enter Title: "; 
 	getline(cin, newTitle);
 	resource->setTitle(newTitle);
 	
 	//get and set the new start and end times
-	cout << "Enter New Resource Start Time (integer): "; 
+	cout << "Enter Start Time (24hr): "; 
 	cin  >> newStart;
-	cout << "Enter New Resource End Time (integer): "; 
+    cin.ignore(10000, '\n');
+	cout << "Enter End Time (24hr): "; 
 	cin  >> newEnd;
+    cin.ignore(10000, '\n');
 	resource->setAvailabilityHours({newStart, newEnd});
 	
 	//dynamically cast resource as a new musicRoom pointer
@@ -202,33 +204,36 @@ void ReservationSystem::editResource(Resource* resource) {
 	//check to make sure the recast worked, if not it should be studyRoom instead
 	if (musicRoom != nullptr){
 		//get and set the new capacity
-        cout << "Enter New Capacity (integer): ";
+        cout << "Enter Capacity: ";
         cin  >> newCapacity;
+        cin.ignore(10000, '\n');
         musicRoom->setCapacity(newCapacity);
         
         //get and set the new location
-        cout << "Enter New Location: ";
+        cout << "Enter Location: ";
         getline(cin, newLocation);
         musicRoom->setLocation(newLocation);
         
         //variable for new user input
-		bool newSoundproof;
+		char newSoundproof;
 		
 		//take in an integer value to set the new boolean for Soundproof
-		cout << "Enter New Soundproof Boolean (0 for false, 1 for true): ";
+		cout << "Is this room soundproof? [Y/N]: ";
 		cin  >> newSoundproof;
-		musicRoom->setSoundproof(newSoundproof);
+        cin.ignore(10000, '\n');
+		musicRoom->setSoundproof(toupper(newSoundproof) == 'Y');
 	}
 	
 	//do this if the resource pointer needs to be recast to studyRoom instead 
 	else{
         //get and set the new capacity
-        cout << "Enter New Capacity (integer): ";
+        cout << "Enter Capacity: ";
         cin  >> newCapacity;
+        cin.ignore(10000, '\n');
         studyRoom->setCapacity(newCapacity);
         
         //get and set the new location
-        cout << "Enter New Location: ";
+        cout << "Enter Location: ";
         getline(cin, newLocation);
         studyRoom->setLocation(newLocation);
 
@@ -236,8 +241,9 @@ void ReservationSystem::editResource(Resource* resource) {
 		int newWhiteboardAmount;
 		
 		//get and set the new whiteboard amount
-		cout << "Enter New Whiteboard Amount: ";
+		cout << "Enter Whiteboard Amount: ";
 		cin  >> newWhiteboardAmount;
+        cin.ignore(10000, '\n');
 		studyRoom->setWhiteboardAmount(newWhiteboardAmount);
 	}
 }

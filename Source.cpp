@@ -96,6 +96,7 @@ int main()
         // Reset Reservation System
         reservationSystem = ReservationSystem();
 
+        clearScreen();
         switch (selection)
         {
         case 1: // MARK: Load System Details
@@ -112,10 +113,12 @@ int main()
 
         while (selection != 0)
         {
+            clearScreen();
             switch (selection)
             {
             case 1: // MARK: Login
                 // Get client details
+                displayTitle("LOGIN");
                 try
                 {
                     clientDetails = reservationSystem.login();
@@ -136,6 +139,7 @@ int main()
                         selection = studentMenu.displayMenu();
                         while (selection != 0)
                         {
+                            clearScreen();
                             switch (selection)
                             {
                             case 1: // View Resources
@@ -143,6 +147,7 @@ int main()
 
                                 while (selection != 0)
                                 {
+                                    clearScreen();
                                     switch (selection)
                                     {
                                     case 1: // List all
@@ -191,6 +196,7 @@ int main()
                                             selection = reservationCreationMenu.displayMenu();
                                             while(selection != 0)
                                             {
+                                                clearScreen();
                                                 switch (selection)
                                                 {
                                                 case 1: // Create Reservation
@@ -242,6 +248,7 @@ int main()
                                 selection = viewReservationsMenu.displayMenu();
                                 while (selection != 0)
                                 {
+                                    clearScreen();
                                     switch (selection)
                                     {
                                     case 1: // Modify Reservation
@@ -302,6 +309,7 @@ int main()
                         selection = adminMenu.displayMenu();
                         while (selection != 0)
                         {
+                            clearScreen();
                             switch (selection)
                             {
                             case 1: // Add Resource
@@ -319,6 +327,7 @@ int main()
 
                                 while (selection != 0)
                                 {
+                                    clearScreen();
                                     switch (selection)
                                     {
                                     case 1: // List all
@@ -367,6 +376,7 @@ int main()
                                             selection = modifyResourceMenu.displayMenu();
                                             while(selection != 0)
                                             {
+                                                clearScreen();
                                                 switch (selection)
                                                 {
                                                 case 1: // Edit Resource
@@ -382,6 +392,7 @@ int main()
                                                 }
 
                                                 clearScreen();
+                                                selectedResource->print();
                                                 selection = modifyResourceMenu.displayMenu();
                                             }
                                         }
