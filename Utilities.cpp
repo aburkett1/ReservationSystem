@@ -315,7 +315,7 @@ void displayEndTimes(vector<int> timeSlots, int startTime)
 {
     displayTitle("END TIMES");
     
-    for (int i = timeSlots[startTime]; i != -1; i++)
+    for (int i = timeSlots[startTime]; timeSlots[i] != -1 && i < timeSlots.size(); i++)
     {
         displayTitle(i+1);
         cout << TimeRange::converter24to12(timeSlots[i] + 1);

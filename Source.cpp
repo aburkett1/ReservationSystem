@@ -143,7 +143,6 @@ int main()
                             switch (selection)
                             {
                             case 1: // View Resources
-                                clearScreen();
                                 selection = viewResourcesMenu.displayMenu();
 
                                 while (selection != 0)
@@ -213,7 +212,7 @@ int main()
 
                                                     // Display End Time Slots
                                                     displayEndTimes(availableTimeSlots, selectedDateTime.startHour);
-                                                    selectedDateTime.endHour = availableTimeSlots[userSelection(availableTimeSlots)];
+                                                    selectedDateTime.endHour = availableTimeSlots[userSelection(availableTimeSlots)] + 1;
 
                                                     // Create reservation
                                                     reservationSystem.createReservation(selectedResource, selectedDateTime, clientDetails);
@@ -324,7 +323,6 @@ int main()
                                 break;
                             
                             case 2: // View Resources
-                                clearScreen();
                                 selection = viewResourcesMenu.displayMenu();
 
                                 while (selection != 0)
@@ -344,8 +342,6 @@ int main()
                                     
                                     case 3: // Search by Name
                                         resourceSearchResults = reservationSystem.searchTitle(getResourceName());
-                                        displayResources(resourceSearchResults);
-                                        selectedResource = resourceSearchResults[userSelection(resourceSearchResults)];
                                         break;
                                     
                                     case 4: // Filter By Resource Type
@@ -353,14 +349,37 @@ int main()
 
                                         if (selection != 0)
                                         {
-                                            resourceSearchResults = reservationSystem.filterResourceType(ResourceType(selection));
-                                            displayResources(resourceSearchResults);
-                                            selectedResource = resourceSearchResults[userSelection(resourceSearchResults)];
+                                            resourceSearchResults = reservationSystem.filterResourceType(ResourceType(selection - 1));
                                         }
+
+                                        selection = 4;
+
                                         break;
                                     
                                     default:
                                         break;
+                                    }
+
+                                    // Verify that something was returned.
+                                    if (selection == 2 && selectedResource == nullptr)
+                                    {
+                                        cout << "No results found." << endl;
+                                        pressEnterToContinue();
+                                        break;
+                                    }
+                                    if (selection == 3 || selection == 4)
+                                    {
+                                        if (resourceSearchResults.size() > 0)
+                                        {
+                                            displayResources(resourceSearchResults);
+                                            selectedResource = resourceSearchResults[userSelection(resourceSearchResults)];
+                                        }
+                                        else
+                                        {
+                                            cout << "No results found." << endl;
+                                            pressEnterToContinue();
+                                            break;
+                                        }
                                     }
 
                                     // MARK: Reservation Creation
@@ -394,7 +413,16 @@ int main()
                                                 }
 
                                                 clearScreen();
-                                                selectedResource->print();
+                                                // Print new data
+                                                if (selection == 1)
+                                                {
+                                                    selectedResource->print();
+                                                }
+                                                // Exit out of modifyResourceMenu
+                                                else if (selection == 2)
+                                                {
+                                                    break;
+                                                }
                                                 selection = modifyResourceMenu.displayMenu();
                                             }
                                         }

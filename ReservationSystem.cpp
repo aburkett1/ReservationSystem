@@ -220,7 +220,7 @@ void ReservationSystem::editResource(Resource* resource) {
 		//take in an integer value to set the new boolean for Soundproof
 		cout << "Is this room soundproof? [Y/N]: ";
 		cin  >> newSoundproof;
-    cin.ignore(10000, '\n');
+        cin.ignore(10000, '\n');
 		musicRoom->setSoundproof(toupper(newSoundproof) == 'Y');
 	}
 	
@@ -250,17 +250,17 @@ void ReservationSystem::editResource(Resource* resource) {
 
 void ReservationSystem::removeResource(Resource* resource) {
 	//variables to keep track of important search criteria
-	string targetTitle;
-	int targetID;
-	int resourceLocation;
-	int index;
+	string targetTitle{};
+	int targetID{};
+	int resourceLocation = -1;
+	int index{};
+
+    //set target search values
+    targetTitle = resource->getTitle();
+    targetID = resource->getID();
 	
 	//cycle through all indices in resources vector
-	while(index < resources.size()){
-		//set target search values
-		targetTitle = resource->getTitle();
-		targetID = resource->getID();
-		
+	while(index < resources.size() && resourceLocation == -1){
 		//check if the current location is a match for the target resource
 		if(resources[index]->getTitle() == targetTitle && resources[index]->getID() == targetID){
 			//set the resource's location at this index for later use
@@ -268,12 +268,16 @@ void ReservationSystem::removeResource(Resource* resource) {
 		}
 		index++;
 	}
-	//delete the resource's referenced object, then make the pointer null to avoid a dumped variable
-	delete resource;
-	resource = nullptr;
-	
-	//erase the resource from the vector, which will then shift to fill the blank index
-	resources.erase(resources.begin() + resourceLocation);
+
+    if (resourceLocation == -1)
+        return;
+    
+    //erase the resource from the vector, which will then shift to fill the blank index
+    resources.erase(resources.begin() + resourceLocation);
+
+    //delete the resource's referenced object, then make the pointer null to avoid a dumped variable
+    delete resources[resourceLocation];
+    resource = nullptr;
 }
 
 void ReservationSystem::listResources() const {
@@ -326,29 +330,27 @@ vector<Resource*> ReservationSystem::searchTitle(string name) const
 
 vector<Resource*> ReservationSystem::filterResourceType(ResourceType resourceFlag) const
 {
-    vector<Resource*> resources;
-    
-    for (Reservation* reservation : reservations)
-    {
-        Resource* resource = reservation->getResource();
+    vector<Resource*> filteredResources{};
 
+    for (Resource* resource : resources)
+    {        
         if (resourceFlag == MUSIC_ROOM)
         {
             if (dynamic_cast<MusicRoom*>(resource))
             {
-                resources.push_back(resource);
+                filteredResources.push_back(resource);
             }
         }
         else if (resourceFlag == STUDY_ROOM)
         {
             if (dynamic_cast<StudyRoom*>(resource))
             {
-                resources.push_back(resource);
+                filteredResources.push_back(resource);
             }
         }
     }
 
-    return resources;
+    return filteredResources;
 }
 
 vector<int> ReservationSystem::checkAvailability(Resource* resource, string date)
