@@ -305,10 +305,10 @@ void displayStartTimes(vector<int> timeSlots)
     
     for (int i = 0; i < timeSlots.size(); i++)
     {
-        displayTitle(i+1);
-        cout << TimeRange::converter24to12(timeSlots[i]);
+        cout << " " << i+1 << ": ";
+        cout << TimeRange::converter24to12(timeSlots[i]) << '\n';
     }
-
+    cout << '\n';
 }
 
 void displayEndTimes(vector<int> timeSlots, int startTime)
@@ -317,9 +317,10 @@ void displayEndTimes(vector<int> timeSlots, int startTime)
     
     for (int i = timeSlots[startTime]; timeSlots[i] != -1 && i < timeSlots.size(); i++)
     {
-        displayTitle(i+1);
-        cout << TimeRange::converter24to12(timeSlots[i] + 1);
+        cout << " " << i + 1 << ": ";
+        cout << TimeRange::converter24to12(timeSlots[i] + 1) << '\n';
     }
+    cout << '\n';
 }
 
 void displayReservations(vector<Reservation*>& results)
