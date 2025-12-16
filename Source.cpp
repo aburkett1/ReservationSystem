@@ -213,7 +213,7 @@ int main()
 
                                                     // Display End Time Slots
                                                     displayEndTimes(availableTimeSlots, selectedDateTime.startHour);
-                                                    selectedDateTime.endHour = availableTimeSlots[userSelection(availableTimeSlots)];
+                                                    selectedDateTime.endHour = availableTimeSlots[userSelection(availableTimeSlots)] + 1;
 
                                                     // Create reservation
                                                     reservationSystem.createReservation(selectedResource, selectedDateTime, clientDetails);

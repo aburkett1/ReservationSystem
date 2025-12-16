@@ -42,8 +42,8 @@ void ReservationSystem::registerUser()
     cout << "--------------------------------" << '\n';
     cout << " ====  User Type Options   ==== " << '\n';
     cout << "--------------------------------" << '\n';
-    cout << "\t0 - Admin\n";
-    cout << "\t1 - Student\n";
+    cout << " 0 - Admin\n";
+    cout << " 1 - Student\n";
     cout << "--------------------------------" << '\n';
 
     while (!valid) {
