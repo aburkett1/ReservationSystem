@@ -139,6 +139,7 @@ int main()
                             switch (selection)
                             {
                             case 1: // View Resources
+                                clearScreen();
                                 selection = viewResourcesMenu.displayMenu();
 
                                 while (selection != 0)
@@ -315,6 +316,7 @@ int main()
                                 break;
                             
                             case 2: // View Resources
+                                clearScreen();
                                 selection = viewResourcesMenu.displayMenu();
 
                                 while (selection != 0)
@@ -428,6 +430,7 @@ int main()
             case 2: // Register
                 clearScreen();
                 reservationSystem.registerUser();
+                pressEnterToContinue();
                 break;
             
             default:

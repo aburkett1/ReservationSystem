@@ -74,12 +74,12 @@ void ReservationSystem::registerUser()
     User* userPtr = searchUsersByName(username);
 
     if (userPtr != nullptr) {
-        cout << "\nUser with that username already exists.\n";
+        cout << "User with that username already exists.\n\n";
     } else {
         User* newUser = new User(username, static_cast<UserType>(type));
         registeredUsers.push_back(newUser);
 
-        cout << "\nUser registered.\n";
+        cout << "User registered.\n\n";
     }
 }
 
@@ -204,6 +204,7 @@ void ReservationSystem::editResource(Resource* resource) {
 		//get and set the new capacity
         cout << "Enter New Capacity (integer): ";
         cin  >> newCapacity;
+        cin.ignore(10000, '\n');
         musicRoom->setCapacity(newCapacity);
         
         //get and set the new location
@@ -217,6 +218,7 @@ void ReservationSystem::editResource(Resource* resource) {
 		//take in an integer value to set the new boolean for Soundproof
 		cout << "Enter New Soundproof Boolean (0 for false, 1 for true): ";
 		cin  >> newSoundproof;
+        cin.ignore(10000, '\n');
 		musicRoom->setSoundproof(newSoundproof);
 	}
 	
@@ -225,6 +227,7 @@ void ReservationSystem::editResource(Resource* resource) {
         //get and set the new capacity
         cout << "Enter New Capacity (integer): ";
         cin  >> newCapacity;
+        cin.ignore(10000, '\n');
         studyRoom->setCapacity(newCapacity);
         
         //get and set the new location
@@ -238,6 +241,7 @@ void ReservationSystem::editResource(Resource* resource) {
 		//get and set the new whiteboard amount
 		cout << "Enter New Whiteboard Amount: ";
 		cin  >> newWhiteboardAmount;
+        cin.ignore(10000, '\n');
 		studyRoom->setWhiteboardAmount(newWhiteboardAmount);
 	}
 }

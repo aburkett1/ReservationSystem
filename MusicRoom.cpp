@@ -21,6 +21,7 @@ void MusicRoom::print() const {
     cout << setw(20) << "Capacity: "           << capacity << endl;
     cout << setw(20) << "Location: "           << location << endl;
     cout << setw(20) << "Soundproof Status: "  << (soundproof ? "True" : "False") << endl;
+    cout << "--------------------------------" << "\n";
     cout << right;
 }
 
