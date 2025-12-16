@@ -74,12 +74,12 @@ void ReservationSystem::registerUser()
     User* userPtr = searchUsersByName(username);
 
     if (userPtr != nullptr) {
-        cout << "\nUser with that username already exists.\n";
+        cout << "User with that username already exists.\n\n";
     } else {
         User* newUser = new User(username, static_cast<UserType>(type));
         registeredUsers.push_back(newUser);
 
-        cout << "\nUser registered.\n";
+        cout << "User registered.\n\n";
     }
 }
 
@@ -220,7 +220,7 @@ void ReservationSystem::editResource(Resource* resource) {
 		//take in an integer value to set the new boolean for Soundproof
 		cout << "Is this room soundproof? [Y/N]: ";
 		cin  >> newSoundproof;
-        cin.ignore(10000, '\n');
+    cin.ignore(10000, '\n');
 		musicRoom->setSoundproof(toupper(newSoundproof) == 'Y');
 	}
 	
