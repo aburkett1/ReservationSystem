@@ -13,6 +13,7 @@ int main()
     ReservationSystem reservationSystem = ReservationSystem();
     User* clientDetails = nullptr;
     int selection{};
+    int indexSelected{};
     
     // Resources
     vector<Resource*> resourceSearchResults;
@@ -169,8 +170,15 @@ int main()
 
                                         if (selection != 0)
                                         {
-                                            resourceSearchResults = reservationSystem.filterResourceType(ResourceType(selection));
+                                            resourceSearchResults = reservationSystem.filterResourceType(ResourceType(selection - 1));
                                         }
+                                        else
+                                        {
+                                            break;
+                                        }
+
+                                        selection = 4;
+
                                         break;
                                     
                                     default:
@@ -262,7 +270,14 @@ int main()
                                 if (reservationSearchResults.size() != 0)
                                 {
                                     displayReservations(reservationSearchResults);
-                                    selectedReservation = reservationSearchResults[userSelection(reservationSearchResults)];
+                                    indexSelected = userSelection(reservationSearchResults);
+                                    
+                                    // Return to previous page if user enters 0
+                                    if (indexSelected == -1)
+                                    {
+                                        break;
+                                    }
+                                    selectedReservation = reservationSearchResults[indexSelected];
                                 }
                                 else
                                 {
@@ -379,6 +394,10 @@ int main()
                                         if (selection != 0)
                                         {
                                             resourceSearchResults = reservationSystem.filterResourceType(ResourceType(selection - 1));
+                                        }
+                                        else
+                                        {
+                                            break;
                                         }
 
                                         selection = 4;
