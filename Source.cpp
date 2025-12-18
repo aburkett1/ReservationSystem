@@ -162,8 +162,6 @@ int main()
                                     
                                     case 3: // Search by Name
                                         resourceSearchResults = reservationSystem.searchTitle(getResourceName());
-                                        displayResources(resourceSearchResults);
-                                        selectedResource = resourceSearchResults[userSelection(resourceSearchResults)];
                                         break;
                                     
                                     case 4: // Filter By Resource Type
@@ -172,13 +170,33 @@ int main()
                                         if (selection != 0)
                                         {
                                             resourceSearchResults = reservationSystem.filterResourceType(ResourceType(selection));
-                                            displayResources(resourceSearchResults);
-                                            selectedResource = resourceSearchResults[userSelection(resourceSearchResults)];
                                         }
                                         break;
                                     
                                     default:
                                         break;
+                                    }
+
+                                    // Verify that something was returned.
+                                    if (selection == 2 && selectedResource == nullptr)
+                                    {
+                                        cout << "No results found." << endl;
+                                        pressEnterToContinue();
+                                        break;
+                                    }
+                                    if (selection == 3 || selection == 4)
+                                    {
+                                        if (resourceSearchResults.size() > 0)
+                                        {
+                                            displayResources(resourceSearchResults);
+                                            selectedResource = resourceSearchResults[userSelection(resourceSearchResults)];
+                                        }
+                                        else
+                                        {
+                                            cout << "No results found." << endl;
+                                            pressEnterToContinue();
+                                            break;
+                                        }
                                     }
 
                                     // MARK: Reservation Creation
@@ -239,8 +257,19 @@ int main()
                             
                             case 2: // MARK: View Reservations
                                 reservationSearchResults = reservationSystem.viewReservation(clientDetails);
-                                displayReservations(reservationSearchResults);
-                                selectedReservation = reservationSearchResults[userSelection(reservationSearchResults)];
+
+                                // Verify that something was returned.
+                                if (reservationSearchResults.size() != 0)
+                                {
+                                    displayReservations(reservationSearchResults);
+                                    selectedReservation = reservationSearchResults[userSelection(reservationSearchResults)];
+                                }
+                                else
+                                {
+                                    cout << "No reservations made." << endl;
+                                    pressEnterToContinue();
+                                    break;
+                                }
                                 
                                 clearScreen();
                                 displayReservation(selectedReservation);
@@ -382,7 +411,7 @@ int main()
                                         }
                                     }
 
-                                    // MARK: Reservation Creation
+                                    // MARK: Resource Creation
                                     clearScreen();
                                     switch (selection)
                                     {
