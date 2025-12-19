@@ -14,6 +14,8 @@ int main()
     User* clientDetails = nullptr;
     int selection{};
     int indexSelected{};
+    int startingIndex{};
+    int optionsOverride{};
     
     // Resources
     vector<Resource*> resourceSearchResults;
@@ -254,16 +256,19 @@ int main()
                                                     }
                                                     selectedDateTime.startHour = availableTimeSlots[indexSelected];
                                                     
+                                                    // Save index for use in end time selection
+                                                    startingIndex = indexSelected;
+                                                    
                                                     // Display End Time Slots
-                                                    displayEndTimes(availableTimeSlots, selectedDateTime.startHour);
-                                                    indexSelected = userSelection(availableTimeSlots);
+                                                    optionsOverride = displayEndTimes(availableTimeSlots, indexSelected);
+                                                    indexSelected = userSelection(availableTimeSlots, optionsOverride);
 
                                                     // Return to previous page if user enters 0
                                                     if (indexSelected == -1)
                                                     {
                                                         break;
                                                     }
-                                                    selectedDateTime.endHour = availableTimeSlots[indexSelected] + 1;
+                                                    selectedDateTime.endHour = availableTimeSlots[indexSelected + startingIndex] + 1;
 
                                                     // Create reservation
                                                     reservationSystem.createReservation(selectedResource, selectedDateTime, clientDetails);

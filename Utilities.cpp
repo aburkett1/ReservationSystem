@@ -333,16 +333,28 @@ void displayStartTimes(vector<int> timeSlots)
     cout << '\n';
 }
 
-void displayEndTimes(vector<int> timeSlots, int startTime)
+int displayEndTimes(vector<int> timeSlots, int indexStartTime)
 {
+    // Variable
+    bool valid = true;
+    int options{};
+
     displayTitle("END TIMES");
     
-    for (int i = timeSlots[startTime]; timeSlots[i] != -1 && i < timeSlots.size(); i++)
+    for (int i = 0, j = indexStartTime; valid && j < timeSlots.size(); i++, j++)
     {
         cout << " " << i + 1 << ": ";
-        cout << TimeRange::converter24to12(timeSlots[i] + 1) << '\n';
+        cout << TimeRange::converter24to12(timeSlots[j] + 1) << '\n';
+        
+        // Count options for userSelection
+        options++;
+
+        // Check to see if the next time slot is valid.
+        valid = timeSlots[j+1] - timeSlots[j] == 1;
     }
     cout << '\n';
+
+    return options;
 }
 
 void displayReservations(vector<Reservation*>& results)

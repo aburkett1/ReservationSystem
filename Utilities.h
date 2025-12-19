@@ -38,7 +38,7 @@ void displayTitle(T title)
 }
 
 void displayStartTimes(vector<int> timeSlots);
-void displayEndTimes(vector<int> timeSlots, int startTime);
+int displayEndTimes(vector<int> timeSlots, int startTime);
 void displayReservations(vector<Reservation*>& results);
 void displayReservation(Reservation*& selectedReservation);
 void displayTimeSlot(DateAndTimeRange timeSlot);
@@ -48,21 +48,22 @@ void clearScreen();
 
 // Utility
 template <typename T>
-int userSelection(vector<T>& results)
+int userSelection(vector<T>& results, int selectionOverride = 0)
 {
     // Variables
     int selection{};
     bool valid = false;
+    int endRange = (selectionOverride == 0 ? results.size() : selectionOverride);
 
     while (!valid) {
-        cout << "Select option (1-" << results.size() << "), enter 0 to cancel: ";
+        cout << "Select option (1-" << endRange << "), enter 0 to cancel: ";
 
         // Check for numerical input
         if (!(cin >> selection)) {
             cin.clear();
             cin.ignore(10000, '\n');
             printLine();
-            cout << "Invalid input.\nPlease select option (1-" << results.size() << "), enter 0 to cancel.\n";
+            cout << "Invalid input.\nPlease select option (1-" << endRange << "), enter 0 to cancel.\n";
             printLine();
         } else {
             cin.ignore(10000, '\n');
@@ -70,9 +71,9 @@ int userSelection(vector<T>& results)
             // Allows for user to return to previous page
             if (selection == 0) return -1;
 
-            if (selection < 1 || selection > results.size()) {
+            if (selection < 1 || selection > endRange) {
                 printLine();
-                cout << "Invalid input.\nPlease select option (1-" << results.size() << "), enter 0 to cancel.\n";
+                cout << "Invalid input.\nPlease select option (1-" << endRange << "), enter 0 to cancel.\n";
                 printLine();
             } else {
                 valid = true;
