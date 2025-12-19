@@ -247,11 +247,33 @@ string getDate()
 {
     // Variables
     string date{};
+    bool valid = false;
+    
+    do
+    {
+        // Get date from user
+        cout << "Date [MM/DD/YYYY]: ";
+        getline(cin, date);
 
-    // Get date from user
-    cout << "Date [MM/DD/YYYY]: ";
-    getline(cin, date);
+        try
+        {
+            int month = stoi(date.substr(0,2));
+            int day = stoi(date.substr(3,2));
+            int year = stoi(date.substr(6,4));
 
+            valid = month >= 1 && month <= 12 &&
+                    day >= 1 && day <= 31 &&
+                    year >= 2025 && year <= 9999 &&
+                    date.substr(2,1) == "/" &&
+                    date.substr(5,1) == "/";
+        }
+        catch(const exception& _)
+        {
+            valid = false;
+            cout << "Date must be in the format MM/DD/YYYY." << endl;
+        }
+    } while (!valid);
+    
     return date;
 }
 

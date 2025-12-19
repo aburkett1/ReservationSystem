@@ -226,6 +226,8 @@ int main()
                                                 switch (selection)
                                                 {
                                                 case 1: // Create Reservation
+                                                    displayTitle("TIME SELECTION");
+
                                                     // Get date
                                                     selectedDateTime.date = getDate();
 
