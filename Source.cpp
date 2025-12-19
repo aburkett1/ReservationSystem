@@ -231,17 +231,45 @@ int main()
 
                                                     // Get availability
                                                     availableTimeSlots = reservationSystem.checkAvailability(selectedResource, selectedDateTime.date);
+                                                    
+                                                    // Verify time slots are available
+                                                    if (availableTimeSlots.size() == 0)
+                                                    {
+                                                        cout << selectedResource->getTitle() << " is fully booked on "
+                                                             << selectedDateTime.date << ".\n";
+                                                        pressEnterToContinue();
+                                                        break;
+                                                    }
 
                                                     // Display Start Time Slots
                                                     displayStartTimes(availableTimeSlots);
-                                                    selectedDateTime.startHour = availableTimeSlots[userSelection(availableTimeSlots)];
+                                                    indexSelected = userSelection(availableTimeSlots);
 
+                                                    // Return to previous page if user enters 0
+                                                    if (indexSelected == -1)
+                                                    {
+                                                        break;
+                                                    }
+                                                    selectedDateTime.startHour = availableTimeSlots[indexSelected];
+                                                    
                                                     // Display End Time Slots
                                                     displayEndTimes(availableTimeSlots, selectedDateTime.startHour);
-                                                    selectedDateTime.endHour = availableTimeSlots[userSelection(availableTimeSlots)] + 1;
+                                                    indexSelected = userSelection(availableTimeSlots);
+
+                                                    // Return to previous page if user enters 0
+                                                    if (indexSelected == -1)
+                                                    {
+                                                        break;
+                                                    }
+                                                    selectedDateTime.endHour = availableTimeSlots[indexSelected] + 1;
 
                                                     // Create reservation
                                                     reservationSystem.createReservation(selectedResource, selectedDateTime, clientDetails);
+
+                                                    // Print success message
+                                                    printLine();
+                                                    cout << "Reservation made successfully." << endl;
+                                                    pressEnterToContinue();
                                                     break;
                                                 
                                                 default:
@@ -249,6 +277,7 @@ int main()
                                                 }
 
                                                 clearScreen();
+                                                selectedResource->print();
                                                 selection = reservationCreationMenu.displayMenu();
                                             }
                                         }
@@ -322,6 +351,16 @@ int main()
                                     }
 
                                     clearScreen();
+                                    // Print new data
+                                    if (selection == 1)
+                                    {
+                                        displayReservation(selectedReservation);
+                                    }
+                                    // Exit out of viewReservationsMenu
+                                    else if (selection == 2)
+                                    {
+                                        break;
+                                    }
                                     selection = viewReservationsMenu.displayMenu();
                                 }
                                 break;

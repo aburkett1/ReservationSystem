@@ -305,7 +305,7 @@ void displayStartTimes(vector<int> timeSlots)
     
     for (int i = 0; i < timeSlots.size(); i++)
     {
-        cout << " " << i+1 << ": ";
+        cout << " " << i + 1 << ": ";
         cout << TimeRange::converter24to12(timeSlots[i]) << '\n';
     }
     cout << '\n';

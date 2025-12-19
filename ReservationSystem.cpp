@@ -374,10 +374,14 @@ vector<int> ReservationSystem::checkAvailability(Resource* resource, string date
         DateAndTimeRange timeSlot = reservation->getTimeSlot();
         if (date == timeSlot.date)
         {
-            for (int i = timeSlot.startHour; i < timeSlot.endHour; i++)
+            for (int i = 0; i < avialableTimeSlots.size(); i++)
             {
-                // Set hour as unavailable
-                avialableTimeSlots[i] = -1;
+                if (avialableTimeSlots[i] >= timeSlot.startHour &&
+                    avialableTimeSlots[i] < timeSlot.endHour)
+                {
+                    // Set hour as unavailable
+                    avialableTimeSlots[i] = -1;
+                }
             }
         }
     }
