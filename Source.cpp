@@ -24,6 +24,7 @@ int main()
     // Reservations
     vector<Reservation*> reservationSearchResults;
     Reservation* selectedReservation = nullptr;
+    Reservation backupReservation{};
 
     // Time Slots
     vector<int> availableTimeSlots{};
@@ -335,16 +336,63 @@ int main()
                                         // Get date
                                         selectedDateTime.date = selectedReservation->getTimeSlot().date;
 
-                                        // Get availability
+                                        // Get current availability
+                                        selectedResource = selectedReservation->getResource();
+                                        availableTimeSlots = reservationSystem.checkAvailability(selectedResource, selectedDateTime.date);
+                                        
+                                        // Verify time slots are available
+                                        if (availableTimeSlots.size() == 0)
+                                        {
+                                            cout << "Cannot change time." << endl
+                                                 << selectedResource->getTitle() << " is fully booked on "
+                                                 << selectedDateTime.date << ".\n";
+                                            pressEnterToContinue();
+                                            break;
+                                        }
+
+                                        backupReservation = *selectedReservation;
+
+                                        // Remove current reservation
+                                        reservationSystem.cancelReservation(selectedReservation);
+
+                                        // Get new availability
                                         availableTimeSlots = reservationSystem.checkAvailability(selectedResource, selectedDateTime.date);
 
                                         // Display Start Time Slots
                                         displayStartTimes(availableTimeSlots);
-                                        selectedDateTime.startHour = availableTimeSlots[userSelection(availableTimeSlots)];
+                                        indexSelected = userSelection(availableTimeSlots);
 
+                                        // Return to previous page if user enters 0
+                                        if (indexSelected == -1)
+                                        {
+                                            // Recreate previous reservation from backup
+                                            reservationSystem.createReservation(backupReservation.getResource(),
+                                                                                backupReservation.getTimeSlot(),
+                                                                                backupReservation.getUser());
+                                            break;
+                                        }
+                                        selectedDateTime.startHour = availableTimeSlots[indexSelected];
+                                        
+                                        // Save index for use in end time selection
+                                        startingIndex = indexSelected;
+                                        
                                         // Display End Time Slots
-                                        displayEndTimes(availableTimeSlots, selectedDateTime.startHour);
-                                        selectedDateTime.endHour = availableTimeSlots[userSelection(availableTimeSlots)];
+                                        optionsOverride = displayEndTimes(availableTimeSlots, indexSelected);
+                                        indexSelected = userSelection(availableTimeSlots, optionsOverride);
+
+                                        // Return to previous page if user enters 0
+                                        if (indexSelected == -1)
+                                        {
+                                            // Recreate previous reservation from backup
+                                            reservationSystem.createReservation(backupReservation.getResource(),
+                                                                                backupReservation.getTimeSlot(),
+                                                                                backupReservation.getUser());
+                                            break;
+                                        }
+                                        selectedDateTime.endHour = availableTimeSlots[indexSelected + startingIndex] + 1;
+
+                                        // Put backup back into selectedResource for printing and futher modifying.
+                                        selectedReservation = &backupReservation;
 
                                         reservationSystem.modifyReservation(selectedReservation, selectedDateTime);
                                         break;
@@ -361,7 +409,14 @@ int main()
                                     // Print new data
                                     if (selection == 1)
                                     {
-                                        displayReservation(selectedReservation);
+                                        if (indexSelected == -1)
+                                        {
+                                            displayReservation(&backupReservation);
+                                        }
+                                        else
+                                        {
+                                            displayReservation(selectedReservation);
+                                        }
                                     }
                                     // Exit out of viewReservationsMenu
                                     else if (selection == 2)

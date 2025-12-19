@@ -40,7 +40,7 @@ void displayTitle(T title)
 void displayStartTimes(vector<int> timeSlots);
 int displayEndTimes(vector<int> timeSlots, int startTime);
 void displayReservations(vector<Reservation*>& results);
-void displayReservation(Reservation*& selectedReservation);
+void displayReservation(Reservation* selectedReservation);
 void displayTimeSlot(DateAndTimeRange timeSlot);
 void displayResources(vector<Resource*>& results);
 
@@ -48,12 +48,12 @@ void clearScreen();
 
 // Utility
 template <typename T>
-int userSelection(vector<T>& results, int selectionOverride = 0)
+int userSelection(vector<T>& results, int optionsOverride = 0)
 {
     // Variables
     int selection{};
     bool valid = false;
-    int endRange = (selectionOverride == 0 ? results.size() : selectionOverride);
+    int endRange = (optionsOverride == 0 ? results.size() : optionsOverride);
 
     while (!valid) {
         cout << "Select option (1-" << endRange << "), enter 0 to cancel: ";

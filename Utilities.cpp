@@ -369,7 +369,7 @@ void displayReservations(vector<Reservation*>& results)
     }
 }
 
-void displayReservation(Reservation*& selectedReservation)
+void displayReservation(Reservation* selectedReservation)
 {
     //dynamically cast resource as a new musicRoom pointer
 	MusicRoom* musicRoom = dynamic_cast<MusicRoom*>(selectedReservation->getResource());
