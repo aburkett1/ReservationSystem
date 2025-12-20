@@ -91,7 +91,7 @@ Reservation* ReservationSystem::createReservation(Resource* resource, DateAndTim
 {
     Reservation* reservation = new Reservation(user, resource, timeSlot);
     reservations.push_back(reservation);
-    
+
     return reservation;
 }
 
@@ -178,8 +178,7 @@ void ReservationSystem::editResource(Resource* resource) {
 	
 	//variables for new user input
 	string newTitle;
-	int newStart;
-	int newEnd;
+    TimeRange newAvailability;
 	int newCapacity;
 	string newLocation;
 	
@@ -189,13 +188,8 @@ void ReservationSystem::editResource(Resource* resource) {
 	resource->setTitle(newTitle);
 	
 	//get and set the new start and end times
-	cout << "Enter Start Time (24hr): "; 
-	cin  >> newStart;
-    cin.ignore(10000, '\n');
-	cout << "Enter End Time (24hr): "; 
-	cin  >> newEnd;
-    cin.ignore(10000, '\n');
-	resource->setAvailabilityHours({newStart, newEnd});
+    newAvailability = getAvailability();
+	resource->setAvailabilityHours(newAvailability);
 	
 	//dynamically cast resource as a new musicRoom pointer
 	MusicRoom* musicRoom = dynamic_cast<MusicRoom*>(resource);
@@ -206,9 +200,7 @@ void ReservationSystem::editResource(Resource* resource) {
 	//check to make sure the recast worked, if not it should be studyRoom instead
 	if (musicRoom != nullptr){
 		//get and set the new capacity
-        cout << "Enter Capacity: ";
-        cin  >> newCapacity;
-        cin.ignore(10000, '\n');
+        newCapacity = getCapacity();
         musicRoom->setCapacity(newCapacity);
         
         //get and set the new location
@@ -217,21 +209,17 @@ void ReservationSystem::editResource(Resource* resource) {
         musicRoom->setLocation(newLocation);
         
         //variable for new user input
-		char newSoundproof;
+		bool newSoundproof;
 		
 		//take in an integer value to set the new boolean for Soundproof
-		cout << "Is this room soundproof? [Y/N]: ";
-		cin  >> newSoundproof;
-        cin.ignore(10000, '\n');
-		musicRoom->setSoundproof(toupper(newSoundproof) == 'Y');
+		newSoundproof = getSoundproof();
+		musicRoom->setSoundproof(newSoundproof);
 	}
 	
 	//do this if the resource pointer needs to be recast to studyRoom instead 
 	else{
         //get and set the new capacity
-        cout << "Enter Capacity: ";
-        cin  >> newCapacity;
-        cin.ignore(10000, '\n');
+        newCapacity = getCapacity();
         studyRoom->setCapacity(newCapacity);
         
         //get and set the new location
@@ -243,9 +231,7 @@ void ReservationSystem::editResource(Resource* resource) {
 		int newWhiteboardAmount;
 		
 		//get and set the new whiteboard amount
-		cout << "Enter Whiteboard Amount: ";
-		cin  >> newWhiteboardAmount;
-        cin.ignore(10000, '\n');
+		newWhiteboardAmount = getWhiteboardAmount();
 		studyRoom->setWhiteboardAmount(newWhiteboardAmount);
 	}
 }
@@ -278,7 +264,7 @@ void ReservationSystem::removeResource(Resource* resource) {
     resources.erase(resources.begin() + resourceLocation);
 
     //delete the resource's referenced object, then make the pointer null to avoid a dumped variable
-    delete resources[resourceLocation];
+    delete resource;
     resource = nullptr;
 }
 

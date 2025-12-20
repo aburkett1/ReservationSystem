@@ -6,6 +6,7 @@
 #include "Resource.h"
 #include "MusicRoom.h"
 #include "StudyRoom.h"
+#include "Utilities.h"
 #include <vector>
 #include <string>
 #include <fstream>

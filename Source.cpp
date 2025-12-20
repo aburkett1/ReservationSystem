@@ -129,6 +129,10 @@ int main()
                 }
                 catch(const exception& e)
                 {
+                    // Set user to nullptr
+                    clientDetails = nullptr;
+                    
+                    // Display message
                     cout << e.what() << '\n';
                     pressEnterToContinue();
                 }
@@ -578,12 +582,12 @@ int main()
 
                                                 clearScreen();
                                                 // Print new data
-                                                if (selection == 1)
+                                                if (selection == 1) // Edit Resource
                                                 {
                                                     selectedResource->print();
                                                 }
                                                 // Exit out of modifyResourceMenu
-                                                else if (selection == 2)
+                                                else if (selection == 2) // Remove Resource
                                                 {
                                                     break;
                                                 }
