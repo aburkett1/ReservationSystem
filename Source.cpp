@@ -2,6 +2,41 @@
 #include "ReservationSystem.h"
 
 // ==== main ===================================================================
+// Operation:
+// -----------------------------------------------------------------------------
+// System Loading:
+// -----------------------------------------------------------------------------
+// The system will allow you to either load from files or start a fresh
+// system. The files that are loaded from are:
+//     Users:        registered_users.txt
+//     Resources:    resources.txt
+//     Reservations: reservations.txt
+//
+// -----------------------------------------------------------------------------
+// Login:
+// -----------------------------------------------------------------------------
+// The system will then ask for login credentials. You can either login or
+// register. If your username is incorrect, you will be sent back to the
+// login menu. If you try to register a username that is already taken, 
+// the system will inform you and return you to the login menu.
+//
+// -----------------------------------------------------------------------------
+// Student Portal:
+// -----------------------------------------------------------------------------
+// The student portal will allow you to create new reservations and modify /
+// cancel existing reservations. To create a new reservation, first find the
+// resource in 'View Resources' and then select the resource you wish to make
+// a reservation for. A resource can be selected by ID, name, or resource type.
+// To modify or cancel an existing reservation, select the reservation in
+// 'View Reservations' and then select the option you wish to perform.
+//
+// -----------------------------------------------------------------------------
+// Admin Portal:
+// -----------------------------------------------------------------------------
+// The admin portal will allow you to add new resources and edit / cancel
+// existing resources. To edit or cancel an existing resource, first find the
+// resource in 'View Resources' and then select the option you wish to perform.
+// An existing resource can be selected by ID, name, or resource type.
 //
 // =============================================================================
 int main()
@@ -131,7 +166,7 @@ int main()
                 {
                     // Set user to nullptr
                     clientDetails = nullptr;
-                    
+
                     // Display message
                     cout << e.what() << '\n';
                     pressEnterToContinue();
