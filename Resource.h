@@ -22,7 +22,7 @@ struct TimeRange {
 
     static string converter24to12(int time24hr)
     {
-        if (time24hr == 0)
+        if (time24hr == 0 || time24hr == 24)
         {
             return "12 AM";
         }
@@ -55,8 +55,11 @@ public:
     void setTitle(string title) { this->title = title; }
     void setAvailabilityHours(TimeRange availabilityHours) { this->availabilityHours = availabilityHours; }
 
-    // IO
-    virtual void print() const = 0;
+    // Console IO
+    virtual void print() = 0;
+    void displayTitle();
+
+    // File IO
     virtual void exportToFile(ofstream& fout) const = 0;
     virtual void importFromFile(ifstream& fin) = 0;
     static Resource* importResource(ifstream& fin);

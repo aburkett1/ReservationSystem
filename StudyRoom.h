@@ -21,7 +21,7 @@ public:
     void setLocation(string location) { this->location = location; }
     void setWhiteboardAmount(int whiteboardAmount) { this->whiteboardAmount = whiteboardAmount; }
 
-    void print() const;
+    void print();
     void exportToFile(ofstream& fout) const;
     void importFromFile(ifstream& fin);
 

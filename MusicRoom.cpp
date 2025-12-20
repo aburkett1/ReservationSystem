@@ -8,11 +8,10 @@ MusicRoom::MusicRoom(string title, TimeRange availability, int capacity, string 
     this->soundproof = soundproof;
 }
 
-void MusicRoom::print() const {
+void MusicRoom::print() {
     cout << left;
-    cout << "--------------------------------" << "\n";
-    cout << "========= " << title << " =========\n";
-    cout << "--------------------------------" << "\n";
+    
+    displayTitle();
     cout << setw(20) << "ID: " << id << endl;
     cout << setw(20) << "Type: " << "Music Room" << endl;
     cout << setw(20) << "Availability hours: "
@@ -21,7 +20,14 @@ void MusicRoom::print() const {
     cout << setw(20) << "Capacity: "           << capacity << endl;
     cout << setw(20) << "Location: "           << location << endl;
     cout << setw(20) << "Soundproof Status: "  << (soundproof ? "True" : "False") << endl;
-    cout << "--------------------------------" << "\n";
+    
+    // Print line
+    cout << setfill('-');
+    cout << setw(50) << '-' << endl;
+    
+    // Reset setfill
+    cout << setfill(' ');
+
     cout << right;
 }
 

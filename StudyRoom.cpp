@@ -8,17 +8,26 @@ StudyRoom::StudyRoom(string title, TimeRange availability, int capacity, string 
     this->whiteboardAmount = whiteboardAmount;
 }
 
-void StudyRoom::print() const {
+void StudyRoom::print() {
     cout << left;
-    cout << "--------------------------------" << "\n";
-    cout << "======== " << title << " ========\n";
-    cout << "--------------------------------" << "\n";
+    
+    displayTitle();
     cout << setw(20) << "ID: " << id << endl;
     cout << setw(20) << "Type: " << "Study Room" << endl;
-    cout << setw(20) << "Availability hours: " << availabilityHours.startHour << " - " << availabilityHours.endHour << endl;
+    cout << setw(20) << "Availability hours: "
+         << availabilityHours.converter24to12(availabilityHours.startHour) << " - " 
+         << availabilityHours.converter24to12(availabilityHours.endHour) << endl;
     cout << setw(20) << "Capacity: " << capacity << endl;
     cout << setw(20) << "Location: " << location << endl;
     cout << setw(20) << "Whiteboards: " << whiteboardAmount << endl;
+    
+    // Print line
+    cout << setfill('-');
+    cout << setw(50) << '-' << endl;
+    
+    // Reset setfill
+    cout << setfill(' ');
+
     cout << right;
 }
 

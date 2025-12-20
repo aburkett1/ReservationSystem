@@ -161,10 +161,12 @@ int main()
                                     
                                     // MARK: Reservation Filtering
                                     case 2: // Search by ID
+                                        displayTitle("SEARCH BY ID");
                                         selectedResource = reservationSystem.searchID(getResourceId());
                                         break;
                                     
                                     case 3: // Search by Name
+                                        displayTitle("SEARCH BY NAME");
                                         resourceSearchResults = reservationSystem.searchTitle(getResourceName());
                                         break;
                                     
@@ -191,6 +193,7 @@ int main()
                                     // Verify that something was returned.
                                     if (selection == 2 && selectedResource == nullptr)
                                     {
+                                        printLine();
                                         cout << "No results found." << endl;
                                         pressEnterToContinue();
                                         break;
@@ -204,6 +207,7 @@ int main()
                                         }
                                         else
                                         {
+                                            printLine();
                                             cout << "No results found." << endl;
                                             pressEnterToContinue();
                                             break;
@@ -240,7 +244,8 @@ int main()
                                                     // Verify time slots are available
                                                     if (availableTimeSlots.size() == 0)
                                                     {
-                                                        cout << selectedResource->getTitle() << " is fully booked on "
+                                                        cout << endl
+                                                             << selectedResource->getTitle() << " is fully booked on "
                                                              << selectedDateTime.date << ".\n";
                                                         pressEnterToContinue();
                                                         break;
@@ -307,6 +312,7 @@ int main()
                                 if (reservationSearchResults.size() != 0)
                                 {
                                     displayReservations(reservationSearchResults);
+                                    printLine();
                                     indexSelected = userSelection(reservationSearchResults);
                                     
                                     // Return to previous page if user enters 0
@@ -366,9 +372,10 @@ int main()
                                         if (indexSelected == -1)
                                         {
                                             // Recreate previous reservation from backup
-                                            reservationSystem.createReservation(backupReservation.getResource(),
+                                            selectedReservation = reservationSystem.createReservation(backupReservation.getResource(),
                                                                                 backupReservation.getTimeSlot(),
                                                                                 backupReservation.getUser());
+                                            
                                             break;
                                         }
                                         selectedDateTime.startHour = availableTimeSlots[indexSelected];
@@ -384,15 +391,18 @@ int main()
                                         if (indexSelected == -1)
                                         {
                                             // Recreate previous reservation from backup
-                                            reservationSystem.createReservation(backupReservation.getResource(),
+                                            selectedReservation = reservationSystem.createReservation(backupReservation.getResource(),
                                                                                 backupReservation.getTimeSlot(),
                                                                                 backupReservation.getUser());
+
                                             break;
                                         }
                                         selectedDateTime.endHour = availableTimeSlots[indexSelected + startingIndex] + 1;
 
                                         // Put backup back into selectedResource for printing and futher modifying.
-                                        selectedReservation = &backupReservation;
+                                        selectedReservation = reservationSystem.createReservation(backupReservation.getResource(),
+                                                                                backupReservation.getTimeSlot(),
+                                                                                backupReservation.getUser());
 
                                         reservationSystem.modifyReservation(selectedReservation, selectedDateTime);
                                         break;
@@ -430,6 +440,7 @@ int main()
                             case 3: // Save System
                                 try
                                 {
+                                    displayTitle("SAVING SYSTEM");
                                     reservationSystem.exportToFiles();
                                     cout << "System Saved Successfully" << endl;
                                 }
@@ -482,10 +493,12 @@ int main()
                                     
                                     // MARK: Resource Filtering
                                     case 2: // Search by ID
+                                        displayTitle("SEARCH BY ID");
                                         selectedResource = reservationSystem.searchID(getResourceId());
                                         break;
                                     
                                     case 3: // Search by Name
+                                        displayTitle("SEARCH BY NAME");
                                         resourceSearchResults = reservationSystem.searchTitle(getResourceName());
                                         break;
                                     
@@ -512,6 +525,7 @@ int main()
                                     // Verify that something was returned.
                                     if (selection == 2 && selectedResource == nullptr)
                                     {
+                                        printLine();
                                         cout << "No results found." << endl;
                                         pressEnterToContinue();
                                         break;
@@ -525,6 +539,7 @@ int main()
                                         }
                                         else
                                         {
+                                            printLine();
                                             cout << "No results found." << endl;
                                             pressEnterToContinue();
                                             break;
@@ -589,6 +604,7 @@ int main()
                             case 3: // Save System
                                 try
                                 {
+                                    displayTitle("SAVING SYSTEM");
                                     reservationSystem.exportToFiles();
                                     cout << "System Saved Successfully" << endl;
                                 }

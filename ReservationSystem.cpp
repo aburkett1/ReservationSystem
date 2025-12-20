@@ -87,10 +87,12 @@ void ReservationSystem::registerUser()
 // MARK: Reservation
 // ========================================================================
 
-void ReservationSystem::createReservation(Resource* resource, DateAndTimeRange timeSlot, User* user)
+Reservation* ReservationSystem::createReservation(Resource* resource, DateAndTimeRange timeSlot, User* user)
 {
     Reservation* reservation = new Reservation(user, resource, timeSlot);
     reservations.push_back(reservation);
+    
+    return reservation;
 }
 
 void ReservationSystem::modifyReservation(Reservation* reservation, TimeRange newTimeSlot) {

@@ -151,12 +151,32 @@ void pressEnterToContinue() {
 int getResourceId()
 {
     // Variables
-    int id{};
+    int id;
+    string idAsString{};
+    bool valid = false;
 
-    // Get id from user
-    cout << "ID: ";
-    cin >> id;
-    cin.ignore(10000, '\n');
+    while (!valid)
+    {
+        // Get id from user
+        cout << "ID: ";
+        getline(cin, idAsString);
+
+        try
+        {
+            // Convert string to int
+            id = stoi(idAsString);
+
+            // If successful
+            valid = true;
+        }
+        catch(const exception& _)
+        {
+            printLine();
+            cout << "ID must be an integer." << endl;
+            printLine();
+        }
+        
+    }
 
     return id;
 }
@@ -178,16 +198,71 @@ TimeRange getAvailability()
     // Variables
     int startTime{};
     int endTime{};
+    string startTimeAsString{};
+    string endTimeAsString{};
+    bool valid = false;
 
-    // Get opening time from user
-    cout << "Opening Time [24hr]: ";
-    cin >> startTime;
-    cin.ignore(10000, '\n');
+    // Get Starting Time
+    while (!valid)
+    {
+        // Get id from user
+        cout << "Opening Time [24hr]: ";
+        getline(cin, startTimeAsString);
+        
+        try
+        {
+            // Convert string to int
+            startTime = stoi(startTimeAsString);
 
-    // Get closing time from user
-    cout << "Closing Time [24hr]: ";
-    cin >> endTime;
-    cin.ignore(10000, '\n');
+            // If successful
+            valid = startTime >= 0 && startTime <= 23;
+
+            if (!valid)
+            {
+                printLine();
+                cout << "Starting time must be between 0 and 23." << endl;
+                printLine();
+            }
+        }
+        catch(const exception& _)
+        {
+            printLine();
+            cout << "Starting time must be an integer." << endl;
+            printLine();
+        }       
+    }
+
+    valid = false;
+
+    // Get Ending Time
+    while (!valid)
+    {
+        // Get id from user
+        cout << "Closing Time [24hr]: ";
+        getline(cin, endTimeAsString);
+        
+        try
+        {
+            // Convert string to int
+            endTime = stoi(endTimeAsString);
+
+            // If successful
+            valid = endTime >= 1 && endTime <= 24 && endTime > startTime;
+
+            if (!valid)
+            {
+                printLine();
+                cout << "Ending time must be between 1 and 24, and must also be later than opening time." << endl;
+                printLine();
+            }
+        }
+        catch(const exception& _)
+        {
+            printLine();
+            cout << "Ending time must be an integer." << endl;
+            printLine();
+        }       
+    }
 
     return TimeRange(startTime, endTime);
 }
@@ -195,12 +270,39 @@ TimeRange getAvailability()
 int getCapacity()
 {
     // Variables
-    int capacity{};
+    int capacity;
+    string capacityAsString{};
+    bool valid = false;
 
-    // Get capacity from user
-    cout << "Capacity: ";
-    cin >> capacity;
-    cin.ignore(10000, '\n');
+    while (!valid)
+    {
+        // Get id from user
+        cout << "Capacity: ";
+        getline(cin, capacityAsString);
+
+        try
+        {
+            // Convert string to int
+            capacity = stoi(capacityAsString);
+
+            // If successful
+            valid = capacity > 0;
+
+            if (!valid)
+            {
+                printLine();
+                cout << "Capacity must be greater than 0." << endl;
+                printLine();
+            }
+        }
+        catch(const exception& _)
+        {
+            printLine();
+            cout << "Capacity must be an integer." << endl;
+            printLine();
+        }
+        
+    }
 
     return capacity;
 }
@@ -221,24 +323,66 @@ bool getSoundproof()
 {
     // Variables
     char isSoundproof{};
+    bool valid = false;
+    
+    while (!valid)
+    {
+        // Get isSoundproof from user
+        cout << "Is this location soundproof? [Y/N]: ";
+        cin >> isSoundproof;
+        cin.ignore(10000, '\n');
 
-    // Get isSoundproof from user
-    cout << "Is this location soundproof? [Y/N]: ";
-    cin >> isSoundproof;
-    cin.ignore(10000, '\n');
+        // Uppercase isSoundproof
+        isSoundproof = toupper(isSoundproof);
 
-    return toupper(isSoundproof) == 'Y';
+        // Check input
+        valid = isSoundproof == 'Y' || isSoundproof == 'N';
+
+        if (!valid)
+        {
+            cout << "Must enter Y/N." << endl;
+        }
+    }
+
+    return isSoundproof == 'Y';
 }
 
 int getWhiteboardAmount()
 {
     // Variables
-    int whiteboardAmount{};
+    int whiteboardAmount;
+    string whiteboardAmountAsString{};
+    bool valid = false;
 
-    // Get whiteboardAmount from user
-    cout << "Whiteboard Amount: ";
-    cin >> whiteboardAmount;
-    cin.ignore(10000, '\n');
+    while (!valid)
+    {
+        // Get id from user
+        cout << "Whiteboard Amount: ";
+        getline(cin, whiteboardAmountAsString);
+
+        try
+        {
+            // Convert string to int
+            whiteboardAmount = stoi(whiteboardAmountAsString);
+
+            // If successful
+            valid = true;
+
+            if (!valid)
+            {
+                printLine();
+                cout << "Whiteboard Amount must be positive or zero." << endl;
+                printLine();
+            }
+        }
+        catch(const exception& _)
+        {
+            printLine();
+            cout << "Whiteboard Amount must be an integer." << endl;
+            printLine();
+        }
+        
+    }
 
     return whiteboardAmount;
 }

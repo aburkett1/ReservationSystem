@@ -9,6 +9,36 @@ Resource::Resource(string title, TimeRange availability)
     this->availabilityHours = availability;
 }
 
+void Resource::displayTitle()
+{
+    // Constants
+    const int barSize = 50;
+    const int space = 2;
+    const int leftBarSize = (barSize - title.size() - space) / 2;
+    const int rightBarSize = barSize - title.size() - leftBarSize - space;
+    
+    // Print line
+    cout << setfill('-');
+    cout << setw(barSize) << '-' << endl;
+    
+    // Print title with filler.
+    cout << setfill('=')
+         << setw(leftBarSize) << '='
+         << ' '
+         << title
+         << ' '
+         << setfill('=')
+         << setw(leftBarSize) << '='
+         << endl;
+
+    // Print line
+    cout << setfill('-');
+    cout << setw(barSize) << '-' << endl;
+    
+    // Reset setfill
+    cout << setfill(' ');
+}
+
 Resource* Resource::importResource(ifstream& fin) {
     int temp;
     fin >> temp;

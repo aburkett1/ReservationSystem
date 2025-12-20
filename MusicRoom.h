@@ -21,7 +21,7 @@ public:
     void setLocation(string location) { this->location = location; }
     void setSoundproof(bool soundproof) { this->soundproof = soundproof; }
 
-    void print() const;
+    void print();
     void exportToFile(ofstream& fout) const;
     void importFromFile(ifstream& fin);
 
