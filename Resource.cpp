@@ -2,12 +2,21 @@
 #include "MusicRoom.h"
 #include "StudyRoom.h"
 
+// =============================================================================
+// MARK: Constructors
+// =============================================================================
+
 Resource::Resource(string title, TimeRange availability)
 {
     this->id = nextId++;
     this->title = title;
     this->availabilityHours = availability;
 }
+
+
+// =============================================================================
+// MARK: Console IO
+// =============================================================================
 
 void Resource::displayTitle()
 {
@@ -38,6 +47,11 @@ void Resource::displayTitle()
     // Reset setfill
     cout << setfill(' ');
 }
+
+
+// =============================================================================
+// MARK: File IO
+// =============================================================================
 
 Resource* Resource::importResource(ifstream& fin) {
     int temp;

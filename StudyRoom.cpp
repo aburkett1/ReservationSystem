@@ -1,5 +1,9 @@
 #include "StudyRoom.h"
 
+// =============================================================================
+// MARK: Constructors
+// =============================================================================
+
 StudyRoom::StudyRoom(string title, TimeRange availability, int capacity, string location, int whiteboardAmount)
 : Resource(title, availability)
 {
@@ -8,9 +12,14 @@ StudyRoom::StudyRoom(string title, TimeRange availability, int capacity, string 
     this->whiteboardAmount = whiteboardAmount;
 }
 
+
+// =============================================================================
+// MARK: Console IO
+// =============================================================================
+
 void StudyRoom::print() {
     cout << left;
-    
+
     displayTitle();
     cout << setw(20) << "ID: " << id << endl;
     cout << setw(20) << "Type: " << "Study Room" << endl;
@@ -30,6 +39,11 @@ void StudyRoom::print() {
 
     cout << right;
 }
+
+
+// =============================================================================
+// MARK: File IO
+// =============================================================================
 
 void StudyRoom::exportToFile(ofstream& fout) const {
     fout << static_cast<int>(STUDY_ROOM) << endl;

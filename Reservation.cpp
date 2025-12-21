@@ -1,5 +1,9 @@
 #include "Reservation.h"
 
+// =============================================================================
+// MARK: File IO
+// =============================================================================
+
 void Reservation::exportToFile(ofstream& fout) const {
     fout << user->getID() << endl;
     fout << resource->getID() << endl;

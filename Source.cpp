@@ -1,4 +1,3 @@
-#include "Utilities.h"
 #include "ReservationSystem.h"
 
 // ==== main ===================================================================
@@ -380,7 +379,7 @@ int main()
                                     clearScreen();
                                     switch (selection)
                                     {
-                                    case 1: // Modify Reservation
+                                    case 1: // MARK: Modify Reservation
                                         // Get date
                                         selectedDateTime.date = selectedReservation->getTimeSlot().date;
 
@@ -449,7 +448,7 @@ int main()
                                         reservationSystem.modifyReservation(selectedReservation, selectedDateTime);
                                         break;
                                     
-                                    case 2: // Cancel Reservation
+                                    case 2: // MARK: Cancel Reservation
                                         reservationSystem.cancelReservation(selectedReservation);
                                         break;
                                     
@@ -479,7 +478,7 @@ int main()
                                 }
                                 break;
                             
-                            case 3: // Save System
+                            case 3: // MARK: Save System
                                 try
                                 {
                                     displayTitle("SAVING SYSTEM");
@@ -510,7 +509,7 @@ int main()
                             clearScreen();
                             switch (selection)
                             {
-                            case 1: // Add Resource
+                            case 1: // MARK: Add Resource
                                 selection = resourceTypeMenu.displayMenu();
                                 if (selection != 0)
                                 {
@@ -588,7 +587,7 @@ int main()
                                         }
                                     }
 
-                                    // MARK: Resource Creation
+                                    // MARK: Resource Modifying
                                     clearScreen();
                                     switch (selection)
                                     {
@@ -610,7 +609,7 @@ int main()
                                                     reservationSystem.editResource(selectedResource);
                                                     break;
                                                 
-                                                case 2: // Remove Resource
+                                                case 2: // MARK: Remove Resource
                                                     reservationSystem.removeResource(selectedResource);
                                                     break;
                                                 
@@ -643,7 +642,7 @@ int main()
                                 }
                                 break;
                             
-                            case 3: // Save System
+                            case 3: // MARK: Save System
                                 try
                                 {
                                     displayTitle("SAVING SYSTEM");
@@ -673,7 +672,7 @@ int main()
                 }
                 break;
 
-            case 2: // Register
+            case 2: // MARK: Register
                 clearScreen();
                 reservationSystem.registerUser();
                 pressEnterToContinue();

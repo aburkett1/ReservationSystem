@@ -1,5 +1,9 @@
 #include "MusicRoom.h"
 
+// =============================================================================
+// MARK: Constructors
+// =============================================================================
+
 MusicRoom::MusicRoom(string title, TimeRange availability, int capacity, string location, bool soundproof)
 : Resource(title, availability)
 {
@@ -7,6 +11,11 @@ MusicRoom::MusicRoom(string title, TimeRange availability, int capacity, string 
     this->location = location;
     this->soundproof = soundproof;
 }
+
+
+// =============================================================================
+// MARK: Console IO
+// =============================================================================
 
 void MusicRoom::print() {
     cout << left;
@@ -30,6 +39,11 @@ void MusicRoom::print() {
 
     cout << right;
 }
+
+
+// =============================================================================
+// MARK: File IO
+// =============================================================================
 
 void MusicRoom::exportToFile(ofstream& fout) const {
     fout << static_cast<int>(MUSIC_ROOM) << endl;

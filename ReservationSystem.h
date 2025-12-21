@@ -1,17 +1,12 @@
 #ifndef RESERVATIONSYSTEM_H_
 #define RESERVATIONSYSTEM_H_
 
-#include "Reservation.h"
-#include "User.h"
-#include "Resource.h"
-#include "MusicRoom.h"
-#include "StudyRoom.h"
 #include "Utilities.h"
-#include <vector>
-#include <string>
-#include <fstream>
-#include <iostream>
 using namespace std;
+
+// =============================================================================
+// MARK: ReservationSystem Class
+// =============================================================================
 
 class ReservationSystem {
 public:

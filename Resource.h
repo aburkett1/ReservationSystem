@@ -1,9 +1,15 @@
 #ifndef RESOURCE_H_
 #define RESOURCE_H_
 
-#include <string>
+#include <iostream>
+#include <iomanip>
 #include <fstream>
+#include "TimeRange.h"
 using namespace std;
+
+// =============================================================================
+// MARK: ResourceType Enum
+// =============================================================================
 
 enum ResourceType {
     MUSIC_ROOM = 0,
@@ -11,47 +17,24 @@ enum ResourceType {
 };
 
 
-struct TimeRange {
-    int startHour;
-    int endHour;
-
-    TimeRange(): startHour(0), endHour(0) {}
-
-    TimeRange(int start, int end)
-        : startHour(start), endHour(end) {}
-
-    static string converter24to12(int time24hr)
-    {
-        if (time24hr == 0 || time24hr == 24)
-        {
-            return "12 AM";
-        }
-        else if (time24hr == 12)
-        {
-            return "12 PM";
-        }
-        else if (time24hr > 12)
-        {
-            return to_string(time24hr - 12) + " PM";
-        }
-        else 
-        {
-            return to_string(time24hr) + " AM";
-        }
-    }
-};
+// =============================================================================
+// MARK: Resource Class
+// =============================================================================
 
 class Resource {
 public:
+    // Constructors
     Resource()
         : id(nextId++), title(""), availabilityHours{0, 0} {}
     Resource(string title, TimeRange availability);
     virtual ~Resource() {}
 
+    // Getters
     int getID() const { return id; }
     string getTitle() const { return title; }
     TimeRange getAvailabilityHours() const { return availabilityHours; }
 
+    // Setters
     void setTitle(string title) { this->title = title; }
     void setAvailabilityHours(TimeRange availabilityHours) { this->availabilityHours = availabilityHours; }
 

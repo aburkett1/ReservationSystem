@@ -3,9 +3,12 @@
 
 #include "Menu.h"
 #include "Reservation.h"
-#include "Resource.h"
 #include "MusicRoom.h"
 #include "StudyRoom.h"
+
+// =============================================================================
+// MARK: Utility Functions
+// =============================================================================
 
 // Constants
 const int LINE_WIDTH = 79;
