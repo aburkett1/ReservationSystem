@@ -12,6 +12,9 @@
 //     Resources:    resources.txt
 //     Reservations: reservations.txt
 //
+// *** Beware, starting a new system will erase all the data stored in the
+// above files.
+//
 // -----------------------------------------------------------------------------
 // Login:
 // -----------------------------------------------------------------------------
