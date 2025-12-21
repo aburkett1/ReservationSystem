@@ -87,9 +87,29 @@ void ReservationSystem::registerUser()
 // MARK: Reservation
 // ========================================================================
 
-Reservation* ReservationSystem::createReservation(Resource* resource, DateAndTimeRange timeSlot, User* user)
+Reservation* ReservationSystem::createReservation(Resource* resource, DateAndTimeRange newTimeSlot, User* user)
 {
-    Reservation* reservation = new Reservation(user, resource, timeSlot);
+    // Verify no overlap
+    for (auto reservation : reservations)
+    {
+        DateAndTimeRange currentTimeSlot = reservation->getTimeSlot();
+
+        // Check for same date
+        if (currentTimeSlot.date == newTimeSlot.date)
+        {
+            // Check for time overlap
+            if (newTimeSlot.startHour >= currentTimeSlot.startHour &&
+                newTimeSlot.startHour < currentTimeSlot.endHour ||
+                newTimeSlot.endHour > currentTimeSlot.startHour &&
+                newTimeSlot.endHour <= currentTimeSlot.endHour)
+            {
+                throw logic_error("\n[createReservation]: New reservation conflicts with an existing reservation.\n");
+            }
+        }
+    }
+    
+    // Create new reservation
+    Reservation* reservation = new Reservation(user, resource, newTimeSlot);
     reservations.push_back(reservation);
 
     return reservation;
@@ -97,7 +117,7 @@ Reservation* ReservationSystem::createReservation(Resource* resource, DateAndTim
 
 void ReservationSystem::modifyReservation(Reservation* reservation, TimeRange newTimeSlot) {
     if (reservation == nullptr)
-        throw runtime_error("\n[modifyReservation]: Invalid reservation pointer.");
+        throw runtime_error("\n[modifyReservation]: Invalid reservation pointer.\n");
 
     // Get current data from the reservation
     Resource* res = reservation->getResource();
@@ -112,7 +132,7 @@ void ReservationSystem::modifyReservation(Reservation* reservation, TimeRange ne
 
     // Basic validation: start < end
     if (updatedSlot.startHour >= updatedSlot.endHour)
-        throw runtime_error("\n[modifyReservation]: Start time must be earlier than end time.");
+        throw runtime_error("\n[modifyReservation]: Start time must be earlier than end time.\n");
 
     // Check for conflicts with other reservations on the same resource and date
     for (Reservation* r : reservations) {
@@ -126,7 +146,7 @@ void ReservationSystem::modifyReservation(Reservation* reservation, TimeRange ne
                                  updatedSlot.startHour >= otherSlot.endHour);
 
                 if (overlap)
-                    throw runtime_error("\n[modifyReservation]: New time slot conflicts with an existing reservation.");
+                    throw runtime_error("\n[modifyReservation]: New time slot conflicts with an existing reservation.\n");
             }
         }
     }

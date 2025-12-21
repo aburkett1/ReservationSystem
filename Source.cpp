@@ -318,12 +318,21 @@ int main()
                                                     selectedDateTime.endHour = availableTimeSlots[indexSelected + startingIndex] + 1;
 
                                                     // Create reservation
-                                                    reservationSystem.createReservation(selectedResource, selectedDateTime, clientDetails);
+                                                    try
+                                                    {
+                                                        reservationSystem.createReservation(selectedResource, selectedDateTime, clientDetails);
 
-                                                    // Print success message
-                                                    printLine();
-                                                    cout << "Reservation made successfully." << endl;
+                                                        // Print success message
+                                                        printLine();
+                                                        cout << "Reservation made successfully." << endl;
+                                                    }
+                                                    catch(const exception& e)
+                                                    {
+                                                        cerr << e.what() << '\n';
+                                                    }
+
                                                     pressEnterToContinue();
+                                                    
                                                     break;
                                                 
                                                 default:
@@ -412,10 +421,17 @@ int main()
                                         // Return to previous page if user enters 0
                                         if (indexSelected == -1)
                                         {
-                                            // Recreate previous reservation from backup
-                                            selectedReservation = reservationSystem.createReservation(backupReservation.getResource(),
+                                            try
+                                            {
+                                                // Recreate previous reservation from backup
+                                                selectedReservation = reservationSystem.createReservation(backupReservation.getResource(),
                                                                                 backupReservation.getTimeSlot(),
                                                                                 backupReservation.getUser());
+                                            }
+                                            catch(const exception& e)
+                                            {
+                                                cerr << e.what() << '\n';
+                                            }
                                             
                                             break;
                                         }
@@ -431,21 +447,37 @@ int main()
                                         // Return to previous page if user enters 0
                                         if (indexSelected == -1)
                                         {
-                                            // Recreate previous reservation from backup
-                                            selectedReservation = reservationSystem.createReservation(backupReservation.getResource(),
+                                            try
+                                            {
+                                                // Recreate previous reservation from backup
+                                                selectedReservation = reservationSystem.createReservation(backupReservation.getResource(),
                                                                                 backupReservation.getTimeSlot(),
                                                                                 backupReservation.getUser());
-
+                                            }
+                                            catch(const exception& e)
+                                            {
+                                                cerr << e.what() << '\n';
+                                            }
+                                            
                                             break;
                                         }
                                         selectedDateTime.endHour = availableTimeSlots[indexSelected + startingIndex] + 1;
 
-                                        // Put backup back into selectedResource for printing and futher modifying.
-                                        selectedReservation = reservationSystem.createReservation(backupReservation.getResource(),
+                                        try
+                                        {
+                                            // Put backup back into selectedResource for printing and futher modifying.
+                                            selectedReservation = reservationSystem.createReservation(backupReservation.getResource(),
                                                                                 backupReservation.getTimeSlot(),
                                                                                 backupReservation.getUser());
 
-                                        reservationSystem.modifyReservation(selectedReservation, selectedDateTime);
+                                            // Modify Resource
+                                            reservationSystem.modifyReservation(selectedReservation, selectedDateTime);
+                                        }
+                                        catch(const exception& e)
+                                        {
+                                            cerr << e.what() << '\n';
+                                        }
+
                                         break;
                                     
                                     case 2: // MARK: Cancel Reservation

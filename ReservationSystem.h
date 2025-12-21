@@ -19,7 +19,7 @@ public:
     void registerUser();
     
     // Reservation
-    Reservation* createReservation(Resource* resource, DateAndTimeRange timeSlot, User* user);
+    Reservation* createReservation(Resource* resource, DateAndTimeRange newTimeSlot, User* user);
     void modifyReservation(Reservation* reservation, TimeRange newTimeSlot);
     void cancelReservation(Reservation* reservation);
     vector<Reservation*> viewReservation(User* client) const;
